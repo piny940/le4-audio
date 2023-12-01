@@ -6,6 +6,8 @@ SR = 16000
 
 x, _ = librosa.load('audio/aiueo-long.wav', sr=SR)
 
+# 入力: 波を表す1次元配列。時間を横軸として、サンプリング周波数ごとの波の振幅をプロットする。
+# 出力: フーリエ変換後の値。周波数を横軸として、各周波数ごとの離散フーリエ変換の出力値をプロットする。
 fft_spec = np.fft.rfft(x)
 a_fft = np.fft.rfft(x[8000:16000])
 i_fft = np.fft.rfft(x[26000:40000])
