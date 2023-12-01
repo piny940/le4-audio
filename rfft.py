@@ -7,26 +7,39 @@ SR = 16000
 x, _ = librosa.load('audio/aiueo-long.wav', sr=SR)
 
 fft_spec = np.fft.rfft(x)
+a_fft = np.fft.rfft(x[8000:16000])
+i_fft = np.fft.rfft(x[26000:40000])
+u_fft = np.fft.rfft(x[55000:65000])
+e_fft = np.fft.rfft(x[80000:85000])
+o_fft = np.fft.rfft(x[98000:105000])
 
 fft_log_abs_spec = np.log(np.abs(fft_spec))
+a_fft_log_abs = np.log(np.abs(a_fft))
+i_fft_log_abs = np.log(np.abs(i_fft))
+u_fft_log_abs = np.log(np.abs(u_fft))
+e_fft_log_abs = np.log(np.abs(e_fft))
+o_fft_log_abs = np.log(np.abs(o_fft))
 
-fig = plt.figure()
+filenames = ['full', 'a', 'i', 'u', 'e', 'o']
 
-plt.xlabel('frequency [Hz]')
-plt.ylabel('amplitude')
+for i, spec in enumerate([fft_log_abs_spec, a_fft_log_abs, i_fft_log_abs, u_fft_log_abs, e_fft_log_abs, o_fft_log_abs]):
+  fig = plt.figure()
 
-x_data = np.linspace((SR / 2) / len(fft_log_abs_spec), SR / 2, len(fft_log_abs_spec))
-plt.plot(x_data, fft_log_abs_spec)
+  plt.xlabel('frequency [Hz]')
+  plt.ylabel('amplitude')
 
-plt.show()
-fig.savefig('plot/rfft.png')
+  x_data = np.linspace((SR / 2) / len(spec), SR / 2, len(spec))
+  plt.plot(x_data, spec)
 
-fig = plt.figure()
-plt.xlabel('frequency [Hz]')
-plt.ylabel('amplitude')
-plt.xlim(0, 2000)
-plt.plot(x_data, fft_log_abs_spec)
+  plt.show()
+  fig.savefig(f'plot/rfft/{filenames[i]}.png')
 
-plt.show()
+  fig = plt.figure()
+  plt.xlabel('frequency [Hz]')
+  plt.ylabel('amplitude')
+  plt.xlim(0, 2000)
+  plt.plot(x_data, spec)
 
-fig.savefig('plot/rfft_2k.png')
+  plt.show()
+
+  fig.savefig(f'plot/rfft/{filenames[i]}-2k.png')
