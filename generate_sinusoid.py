@@ -13,15 +13,19 @@ def generate_sinusoid(sampling_rate, frequency, duration):
 
 
 def write_waveform(filename, waveform, sampling_rate):
-  waveform = waveform * 0.9  # 最大値を0.9にする
+  waveform = waveform * 0.9 / np.max(waveform)  # 最大値を0.9にする
   waveform = (waveform * 32768.0).astype('int16')
   scipy.io.wavfile.write(filename, int(sampling_rate), waveform)
 
 
 SAMPLING_RATE = 16000.0
-FREQUENCY = 440.0
 DURATION = 2.0  # 生成する正弦波の時間的長さ
 
-waveform = generate_sinusoid(SAMPLING_RATE, FREQUENCY, DURATION)
+FIRST_FREC = 440
+SECOND_FREC = 880
 
-write_waveform('audio/sinusoid440.wav', waveform, SAMPLING_RATE)
+waveform = generate_sinusoid(SAMPLING_RATE, SECOND_FREC, DURATION)
+write_waveform(f'audio/sinusoid{SECOND_FREC}.wav', waveform, SAMPLING_RATE)
+
+waveform += generate_sinusoid(SAMPLING_RATE, FIRST_FREC, DURATION)
+write_waveform(f'audio/sinusoid{FIRST_FREC}_{SECOND_FREC}.wav', waveform, SAMPLING_RATE)
