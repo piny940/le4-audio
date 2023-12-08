@@ -31,49 +31,6 @@ def get_cepstrums(waveform, size_frame):
   return cepstrums  # 二次元配列
 
 
-def zero_cross(waveform):
-  d = np.array(waveform)
-  return sum([1 if x < 0.0 else 0 for x in d[1:] * d[:-1]])
-
-
-def zero_cross_rate(waveform, sample_rate):
-  # 単位時間あたりのゼロクロス数
-  return zero_cross(waveform) / (len(waveform) / sample_rate)
-
-
-def is_peak(arr, index):
-  if index == 0 or index == len(arr) - 1:
-    return False
-  return arr[index - 1] < arr[index] and arr[index] > arr[index + 1]
-
-
-def get_f0(waveform, sampling_rate):
-  autocorr = np.correlate(waveform, waveform, 'full')
-  autocorr = autocorr[len(autocorr) // 2:]  # 不要な前半を捨てる
-
-  # ピークを検出
-  peak_indices = [i for i in range(len(autocorr)) if is_peak(autocorr, i)]
-  peak_indices = [i for i in peak_indices if i != 0]  # 最初のピークは除く
-
-  if len(peak_indices) == 0:
-    return 0
-
-  max_peak_index = max(peak_indices, key=lambda index: autocorr[index])
-
-  # 基本周波数を推定
-  f0 = sampling_rate / max_peak_index
-  return f0
-
-
-def is_voiced_sound(waveform, sampling_rate):
-  f0 = get_f0(waveform, sampling_rate)
-  zcr = zero_cross_rate(waveform, sampling_rate)
-  if f0 == 0:
-    return False
-  rate = zcr / f0
-  return 1.95 < rate < 6.0
-
-
 def spectrogram(waveform, size_frame, size_shift):
   spectrogram = []
   hamming_window = np.hamming(size_frame)
@@ -131,11 +88,18 @@ def recognize(waveform, avgs, vars, size_frame):
 SR = 16000
 
 x_long, _ = librosa.load('audio/aiueo-long.wav', sr=SR)
+x_short, _ = librosa.load('audio/aiueo-short.wav', sr=SR)
+
 a = x_long[8000:16000]
 i = x_long[26000:40000]
 u = x_long[55000:65000]
 e = x_long[80000:85000]
 o = x_long[98000:105000]
+# a = x_short[10000:12000]
+# i = x_short[23000:25000]
+# u = x_short[38000:40000]
+# e = x_short[52000:54000]
+# o = x_short[63000:65000]
 learn_data = [a, i, u, e, o]
 
 SIZE_FRAME = 512
@@ -153,7 +117,7 @@ for data in learn_data:
 # シフトサイズ
 SHIFT_SIZE = 16000 / 100  # 10 msec
 
-x_short, _ = librosa.load('audio/aiueo-short.wav', sr=SR)
+x_short, _ = librosa.load('audio/aiueo-long.wav', sr=SR)
 
 spec = spectrogram(x_short, SIZE_FRAME, SHIFT_SIZE)
 rec = recognize(x_short, avgs, vars, SIZE_FRAME)
@@ -174,4 +138,4 @@ plt.imshow(
 plt.ylim(0, 2000)
 
 plt.show()
-fig.savefig('plot/recognition/aiueo-short.png')
+fig.savefig('plot/recognition/aiueo-long.png')
