@@ -61,3 +61,12 @@ def spectrogram(waveform, size_frame, size_shift):
     # 配列に保存
     spectrogram.append(fft_log_abs_spec)
   return spectrogram
+
+
+def estimate_code(spectrum):
+  cv = chroma_vector(spectrum)
+  likelihoods = []
+  for code in CODES:
+    likelihood = 1.0 * cv[code[0]] + 0.5 * cv[code[1]] + 0.8 * cv[code[2]]
+    likelihoods.append(likelihood)
+  return np.argmax(likelihoods)
