@@ -81,8 +81,8 @@ def estimate_codes(spectrogram):
 SR = 16000
 SIZE_FRAME = 2048
 SHIFT_SIZE = 16000 / 100  # 10 msec
-
-x, _ = librosa.load('audio/code/CMa.wav', sr=SR)
+# https://windy-vis.com/art/viewer/Tchaikovsky_Danses_Caracteristiq_Marche.htm
+x, _ = librosa.load('audio/code/danses_short.wav', sr=SR)
 
 spec = spectrogram(x, SIZE_FRAME, SHIFT_SIZE)
 estimated = estimate_codes(spec)
@@ -106,4 +106,4 @@ plt.yticks(np.arange(24),
 
 
 plt.show()
-fig.savefig('plot/code/est-cma.png')
+fig.savefig('plot/code/est-danses.png')
