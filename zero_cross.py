@@ -60,8 +60,10 @@ def get_f0s(waveform, sampling_rate, size_frame):
 def is_voiced_sound(waveform, sampling_rate):
   f0 = get_f0(waveform, sampling_rate)
   zcr = zero_cross_rate(waveform, sampling_rate)
+  if f0 == 0:
+    return False
   rate = zcr / f0
-  return 1.5 < rate < 6.0
+  return 1.95 < rate < 6.0
 
 
 def get_f0s_voiced(waveform, sampling_rate, size_frame):
@@ -108,12 +110,16 @@ SHIFT_SIZE = 16000 / 100  # 10 msec
 
 spec = spectrogram(x, SIZE_FRAME, SHIFT_SIZE)
 f0s = get_f0s(x, SR, SIZE_FRAME)
+f0s_voiced = get_f0s_voiced(x, SR, SIZE_FRAME)
 zcrs = zero_cross_rates(x, SR, SIZE_FRAME)
 
 fig = plt.figure()
 
 plt.xlabel('sample')
 plt.ylabel('frequency [Hz]')
+
+x_data = np.linspace(0, len(x), len(f0s_voiced))
+plt.plot(x_data, f0s_voiced)
 
 x_data = np.linspace(0, len(x), len(f0s))
 plt.plot(x_data, f0s)
@@ -129,4 +135,5 @@ plt.imshow(
 )
 plt.ylim(0, 2000)
 
-fig.savefig('plot/f0/boin-siin.png')
+plt.show()
+fig.savefig('plot/f0/boin-siin-voiced-with-f0.png')
