@@ -54,6 +54,26 @@ def get_f0s(waveform, sampling_rate, size_frame):
   return f0s
 
 
+def is_voiced_sound(waveform, sampling_rate):
+  f0 = get_f0(waveform, sampling_rate)
+  zcr = zero_cross_rate(waveform, sampling_rate)
+  rate = zcr / f0
+  return 1.5 < rate < 6.0
+
+
+def get_f0s_voiced(waveform, sampling_rate, size_frame):
+  f0s = []
+  for i in np.arange(0, len(waveform) - size_frame, size_frame):
+    idx = int(i)
+    x_frame = waveform[idx: idx + size_frame]
+    if is_voiced_sound(x_frame, sampling_rate):
+      f0 = get_f0(x_frame, sampling_rate)
+    else:
+      f0 = 0
+    f0s.append(f0)
+  return f0s
+
+
 def spectrogram(waveform, size_frame, size_shift):
   spectrogram = []
 
