@@ -81,6 +81,7 @@ def get_f0s_voiced(waveform, sampling_rate, size_frame):
 
 def spectrogram(waveform, size_frame, size_shift):
   spectrogram = []
+  hamming_window = np.hamming(size_frame)
 
   for i in np.arange(0, len(waveform) - size_frame, size_shift):
     idx = int(i)
@@ -103,7 +104,6 @@ x, _ = librosa.load('audio/boin-siin.wav', sr=SR)
 
 # フレームサイズ
 SIZE_FRAME = 512
-hamming_window = np.hamming(SIZE_FRAME)
 
 # シフトサイズ
 SHIFT_SIZE = 16000 / 100  # 10 msec
