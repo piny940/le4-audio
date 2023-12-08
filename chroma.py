@@ -1,5 +1,7 @@
 import math
 import numpy as np
+import librosa
+import matplotlib.pyplot as plt
 
 CODES = [
     [0, 4, 7],
@@ -40,7 +42,7 @@ def chroma_vector(spectrum):
   cv = np.zeros(12)
   for s, f in zip(spectrum, frequencies):
     nn = hz2nn(f)
-    cv[nn % 12] += math.abs(s)
+    cv[nn % 12] += abs(s)
   return cv
 
 
@@ -67,6 +69,36 @@ def estimate_code(spectrum):
   cv = chroma_vector(spectrum)
   likelihoods = []
   for code in CODES:
-    likelihood = 1.0 * cv[code[0]] + 0.5 * cv[code[1]] + 0.8 * cv[code[2]]
+    likelihood = 1.0 * cv[code[0]] + 0.8 * cv[code[1]] + 0.5 * cv[code[2]]
     likelihoods.append(likelihood)
   return np.argmax(likelihoods)
+
+
+def estimate_codes(spectrogram):
+  return [estimate_code(np.exp(spectrum)) for spectrum in spectrogram]
+
+
+SR = 16000
+SIZE_FRAME = 2048
+SHIFT_SIZE = 16000 / 100  # 10 msec
+
+x, _ = librosa.load('audio/code/CMa.wav', sr=SR)
+
+spec = spectrogram(x, SIZE_FRAME, SHIFT_SIZE)
+estimated = estimate_codes(spec)
+
+fig = plt.figure()
+
+plt.xlabel('sample')
+plt.ylabel('frequency [Hz]')
+
+plt.plot(np.linspace(0, len(x), len(estimated)), estimated)
+# plt.imshow(
+#     np.flipud(np.array(spec).T),
+#     extent=[0, len(x), 0, SR / 2],
+#     aspect='auto',
+#     interpolation='nearest'
+# )
+
+plt.show()
+fig.savefig('plot/code/est-cma.png')
