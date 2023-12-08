@@ -37,6 +37,9 @@ def get_f0(waveform, sampling_rate):
   peak_indices = [i for i in range(len(autocorr)) if is_peak(autocorr, i)]
   peak_indices = [i for i in peak_indices if i != 0]  # 最初のピークは除く
 
+  if len(peak_indices) == 0:
+    return 0
+
   max_peak_index = max(peak_indices, key=lambda index: autocorr[index])
 
   # 基本周波数を推定
@@ -94,7 +97,7 @@ def spectrogram(waveform, size_frame, size_shift):
 
 SR = 16000
 
-x, _ = librosa.load('audio/aiueo-long.wav', sr=SR)
+x, _ = librosa.load('audio/boin-siin.wav', sr=SR)
 
 # フレームサイズ
 SIZE_FRAME = 512
@@ -126,4 +129,4 @@ plt.imshow(
 )
 plt.ylim(0, 2000)
 
-fig.savefig('plot/f0/aiueo.png')
+fig.savefig('plot/f0/boin-siin.png')
