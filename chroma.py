@@ -99,6 +99,11 @@ plt.plot(np.linspace(0, len(x), len(estimated)), estimated)
 #     aspect='auto',
 #     interpolation='nearest'
 # )
+plt.yticks(np.arange(24),
+           list(map(lambda key: f"{key} major", ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"])) +
+           list(map(lambda key: f"{key} minor", ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]))
+           )
+
 
 plt.show()
 fig.savefig('plot/code/est-cma.png')
