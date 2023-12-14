@@ -35,16 +35,14 @@ def spectrogram(waveform, size_frame, size_shift):
 
 def shs(spectrum, sample_rate, size_frame):
   likelihood = np.zeros(len(NOTES))
-  for idx in range(len(spectrum)):
-    if idx == 0:
-      continue
 
-    freq = idx * sample_rate / size_frame
-    nn = hz2nn(freq)
-    if nn not in NOTES:
-      continue
+  for idx in range(len(likelihood)):
+    base_freq = nn2hz(NOTES[idx])
+    for i in range(1, 16):
+      freq = base_freq * i
+      fft_idx = int(freq * size_frame / sample_rate)
+      likelihood[idx] += 0.8**i * np.exp(spectrum[fft_idx])
 
-    likelihood[nn - NOTES[0]] += spectrum[idx] + 0.8 * spectrum[idx * 2] + 0.6 * spectrum[idx * 3]
   return NOTES[np.argmax(likelihood)]
 
 
@@ -92,9 +90,13 @@ plt.ylabel('frequency [Hz]')
 
 plt.plot(np.linspace(0, len(x), len(melody)), list(map(lambda x: x - NOTES[0], melody)))
 plt.yticks(np.arange(24),
-           list(["A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4",
-                 "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5",
-                 "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5"]))
+           #  list(["A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4",
+           #        "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5",
+           #        "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5"])
+           list(["C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3",
+                 "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4",
+                 "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"])
+           )
 
 plt.show()
 fig.savefig('plot/melody/sts-test.melody.png')
