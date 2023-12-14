@@ -3,7 +3,7 @@ import numpy as np
 import librosa
 import matplotlib.pyplot as plt
 
-NOTES = range(36, 60)
+NOTES = range(57, 81)
 
 
 def hz2nn(frequency):
@@ -40,6 +40,8 @@ def shs(spectrum, sample_rate, size_frame):
     for j in range(1, 16):
       freq = base_freq * j
       fft_idx = int(freq * size_frame / sample_rate)
+      if len(spectrum) <= fft_idx:
+        continue
       likelihood[i] += 0.8**j * np.exp(spectrum[fft_idx])
   return NOTES[np.argmax(likelihood)]
 
@@ -55,7 +57,7 @@ SR = 16000
 SIZE_FRAME = 2048
 SHIFT_SIZE = 16000 / 100  # 10 msec
 # https://www.youtube.com/watch?v=Ci_zad39Uhw
-x, _ = librosa.load('audio/shs-test-man.wav', sr=SR)
+x, _ = librosa.load('audio/rori.wav', sr=SR)
 
 spec = spectrogram(x, SIZE_FRAME, SHIFT_SIZE)
 melody = get_melody(spec)
@@ -66,7 +68,7 @@ plt.plot(x)
 plt.xlabel('sample')
 # plt.show()
 
-fig.savefig('plot/melody/sts-test.wave.png')
+fig.savefig('plot/melody/rori.wave.png')
 
 fig = plt.figure()
 
@@ -80,7 +82,7 @@ plt.imshow(
 )
 # plt.show()
 
-fig.savefig('plot/melody/sts-test.spectrogram.png')
+fig.savefig('plot/melody/rori.spectrogram.png')
 
 fig = plt.figure()
 plt.xlabel('sample')
@@ -88,13 +90,13 @@ plt.ylabel('frequency [Hz]')
 
 plt.plot(np.linspace(0, len(x), len(melody)), list(map(lambda x: x - NOTES[0], melody)))
 plt.yticks(np.arange(24),
-           #  list(["A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4",
-           #        "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5",
-           #        "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5"])
-           list(["C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3",
-                 "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4",
-                 "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"])
+           list(["A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4",
+                 "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5",
+                 "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5"])
+           #  list(["C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3",
+           #        "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4",
+           #        "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"])
            )
 
 plt.show()
-fig.savefig('plot/melody/sts-test.melody.png')
+fig.savefig('plot/melody/rori.melody.png')
