@@ -35,16 +35,12 @@ def spectrogram(waveform, size_frame, size_shift):
 
 def shs(spectrum, sample_rate, size_frame):
   likelihood = np.zeros(len(NOTES))
-  for idx in range(len(spectrum)):
-    if idx == 0:
-      continue
-
-    freq = idx * sample_rate / size_frame
-    nn = hz2nn(freq)
-    if nn not in NOTES:
-      continue
-    for i in range(1, 16):
-      likelihood[nn - NOTES[0]] += np.exp(spectrum[idx]) * 0.8**i
+  for i in range(len(likelihood)):
+    base_freq = nn2hz(NOTES[i])
+    for j in range(1, 16):
+      freq = base_freq * j
+      fft_idx = int(freq * size_frame / sample_rate)
+      likelihood[i] += 0.8**j * np.exp(spectrum[fft_idx])
   return NOTES[np.argmax(likelihood)]
 
 
