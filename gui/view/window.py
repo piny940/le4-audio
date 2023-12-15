@@ -1,22 +1,6 @@
 import tkinter as tk
 
 
-class CanvasCoord(Coord):
-  '''
-  CanvasCoord class is 2 dimention vector to express positions in the canvas.
-  '''
-
-  def __add__(self, other):
-    value = super().__add__(other)
-    value.__class__ = CanvasCoord
-    return value
-
-  def __sub__(self, other):
-    value = super().__sub__(other)
-    value.__class__ = CanvasCoord
-    return value
-
-
 class Window:
   def __init__(self):
     # Window
@@ -24,7 +8,7 @@ class Window:
     self.__WindowHeight = 700
 
     # Title
-    self.__TitleCoord = CanvasCoord(170, 50)
+    self.__TitleCoord = (170, 50)
     self.__TitleSize = 50
     self.__TitleFont = 'Times'
 
@@ -44,8 +28,8 @@ class Window:
 
     # ---- Title -----
     self.__canvas.create_text(
-        self.__TitleCoord.x,
-        self.__TitleCoord.y,
+        self.__TitleCoord[0],
+        self.__TitleCoord[1],
         text='Reversi',
         font=(self.__TitleFont, self.__TitleSize),
         anchor='nw')
