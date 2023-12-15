@@ -7,11 +7,6 @@ class Window:
     self.__WindowWidth = 1000
     self.__WindowHeight = 700
 
-    # Title
-    self.__TitleCoord = (170, 50)
-    self.__TitleSize = 50
-    self.__TitleFont = 'Times'
-
   def create_window(self):
     # ----- Window & Canvas config -----
     self.__window = tk.Tk()
