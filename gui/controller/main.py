@@ -21,6 +21,7 @@ class Controller(IController):
     self.__wave_range = WaveRange(self.__waveform)
     self.update_figures(self.__wave_range.get_waveform())
     self.__view.start_slider.draw(self.__waveform)
+    self.__view.end_slider.draw(self.__waveform)
 
   def update_figures(self, waveform):
     spec = spectrogram(waveform, SIZE_FRAME, SHIFT_SIZE)

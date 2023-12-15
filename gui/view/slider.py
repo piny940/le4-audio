@@ -26,3 +26,11 @@ class StartSlider(Slider):
 
   def draw(self, waveform):
     super().draw(0, len(waveform) - 1)
+
+
+class EndSlider(Slider):
+  def __init__(self, frame: tk.Frame, c: IController):
+    super().__init__(frame, c)
+
+  def draw(self, waveform):
+    super().draw(0, len(waveform) - 1)
