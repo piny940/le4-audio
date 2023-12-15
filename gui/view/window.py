@@ -1,4 +1,5 @@
 import tkinter as tk
+from .spectrogram import Spectrogram
 
 
 class Window:
@@ -6,6 +7,13 @@ class Window:
     # Window
     self.__WindowWidth = 1000
     self.__WindowHeight = 700
+
+    # Title
+    self.__TitleCoord = (170, 50)
+    self.__TitleSize = 50
+    self.__TitleFont = 'Times'
+
+    self.spectrogram = None
 
   def create_window(self):
     # ----- Window & Canvas config -----
@@ -25,5 +33,8 @@ class Window:
         text='Audio',
         font=(self.__TitleFont, self.__TitleSize),
         anchor='nw')
+
+    frame1 = tk.Frame(self.__window)
+    self.spectrogram = Spectrogram(frame1)
 
     self.__window.mainloop()

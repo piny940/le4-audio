@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
-from tkinter import *
+import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
-from ..core.constants import SR
+from core.constants import SR
 
 
 class Spectrogram:
-  def __init__(self, frame):
+  def __init__(self, frame: tk.Frame):
     self.__frame = frame
 
   def draw(self, spectrogram):

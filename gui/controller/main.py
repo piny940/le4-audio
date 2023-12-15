@@ -7,3 +7,4 @@ class Controller:
 
   def main(self):
     self.__view.create_window()
+    self.__view.spectrogram.draw([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
