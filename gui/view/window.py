@@ -1,5 +1,5 @@
 import tkinter as tk
-from .spectrogram import Spectrogram
+from .spectrogram import Figures
 from .title import Title
 
 
@@ -18,17 +18,14 @@ class Window:
     self.__window.geometry(f"{self.__WindowWidth}x{self.__WindowHeight}")
 
     # ---- Title -----
-    title_frame = self.__new_frame()
+    title_frame = tk.Frame(self.__window, width=1000, height=100)
+    title_frame.pack(side=tk.TOP)
     self.title = Title(title_frame)
     self.title.draw()
 
-    # spec_frame = self.__new_frame()
-    # self.spectrogram = Spectrogram(spec_frame)
-    # self.spectrogram.draw([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    spec_frame = tk.Frame(self.__window, width=800, height=400)
+    spec_frame.pack(side=tk.TOP)
+    self.spectrogram = Figures(spec_frame)
+    self.spectrogram.draw([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
     self.__window.mainloop()
-
-  def __new_frame(self):
-    frame = tk.Frame(self.__window)
-    frame.pack(side='left')
-    return frame
