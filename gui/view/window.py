@@ -1,15 +1,17 @@
 import tkinter as tk
 from .figures import Figures
 from .title import Title
+from .file_select import FileSelect
+from controller.interface import IController
 
 
 class Window:
-  def __init__(self):
+  def __init__(self, c: IController):
     # Window
     self.__WindowWidth = 1000
     self.__WindowHeight = 700
 
-    self.spectrogram = None
+    self.__c = c
 
   def create_window(self):
     # ----- Window & Canvas config -----
@@ -23,9 +25,16 @@ class Window:
     self.title = Title(title_frame)
     self.title.draw()
 
+    # ----Figures ----
     spec_frame = tk.Frame(self.__window, width=800, height=400)
     spec_frame.pack(side=tk.TOP)
     self.spectrogram = Figures(spec_frame)
     self.spectrogram.draw([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+    # ---- File Select ----
+    file_select_frame = tk.Frame(self.__window, width=1000, height=100)
+    file_select_frame.pack(side=tk.TOP)
+    self.file_select = FileSelect(file_select_frame, self.__c)
+    self.file_select.draw()
 
     self.__window.mainloop()
