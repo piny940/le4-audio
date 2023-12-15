@@ -33,3 +33,22 @@ def get_f0s(waveform, sampling_rate, size_frame):
     f0 = get_f0(x_frame, sampling_rate)
     f0s.append(f0)
   return f0s
+
+
+def spectrogram(waveform, size_frame, size_shift):
+  spectrogram = []
+  hamming_window = np.hamming(size_frame)
+
+  for i in np.arange(0, len(waveform) - size_frame, size_shift):
+    idx = int(i)
+    x_frame = waveform[idx: idx + size_frame]
+
+    # 窓掛けしたデータをFFT
+    fft_spec = np.fft.rfft(x_frame * hamming_window)
+
+    # 振幅スペクトルを対数化
+    fft_log_abs_spec = np.log(np.abs(fft_spec))
+
+    # 配列に保存
+    spectrogram.append(fft_log_abs_spec)
+  return spectrogram
