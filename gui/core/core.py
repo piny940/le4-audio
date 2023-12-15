@@ -1,4 +1,11 @@
 import numpy as np
+import librosa
+from .constants import SR
+
+
+def load_waveform(filename):
+  x, _ = librosa.load(f'audio/{filename}.wav', sr=SR)
+  return x
 
 
 def is_peak(arr, index):
