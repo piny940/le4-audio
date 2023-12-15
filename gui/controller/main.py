@@ -16,4 +16,5 @@ class Controller(IController):
   def load_file(self, filename):
     waveform = load_waveform(filename)
     spec = spectrogram(waveform, SIZE_FRAME, SHIFT_SIZE)
-    self.__view.figures.draw(spec)
+    f0s = get_f0s(waveform, SR, SIZE_FRAME)
+    self.__view.figures.draw(spec, f0s)
