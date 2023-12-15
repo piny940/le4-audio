@@ -21,20 +21,26 @@ class Window:
     self.__window.title("Audio")
     self.__window.geometry(f"{self.__WindowWidth}x{self.__WindowHeight}")
 
-    self.__canvas = tk.Canvas(self.__window, width=self.__WindowWidth,
-                              height=self.__WindowHeight)
+    # self.__canvas = tk.Canvas(self.__window, width=self.__WindowWidth,
+    #                           height=self.__WindowHeight)
 
-    self.__canvas.grid(row=0, column=0)
+    # self.__canvas.grid(row=0, column=0)
 
-    # ---- Title -----
-    self.__canvas.create_text(
-        self.__TitleCoord[0],
-        self.__TitleCoord[1],
-        text='Audio',
-        font=(self.__TitleFont, self.__TitleSize),
-        anchor='nw')
+    # # ---- Title -----
+    # self.__canvas.create_text(
+    #     self.__TitleCoord[0],
+    #     self.__TitleCoord[1],
+    #     text='Audio',
+    #     font=(self.__TitleFont, self.__TitleSize),
+    #     anchor='nw')
 
-    frame1 = tk.Frame(self.__window)
-    self.spectrogram = Spectrogram(frame1)
+    spec_frame = self.__new_frame()
+    self.spectrogram = Spectrogram(spec_frame)
+    self.spectrogram.draw([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
     self.__window.mainloop()
+
+  def __new_frame(self):
+    frame = tk.Frame(self.__window)
+    frame.pack(side='left')
+    return frame
