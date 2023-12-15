@@ -1,5 +1,5 @@
 import tkinter as tk
-from .spectrogram import Figures
+from .figures import Figures
 from .title import Title
 
 
