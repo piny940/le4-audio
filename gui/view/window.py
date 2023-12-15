@@ -28,8 +28,7 @@ class Window:
     # ----Figures ----
     spec_frame = tk.Frame(self.__window, width=800, height=400)
     spec_frame.pack(side=tk.TOP)
-    self.spectrogram = Figures(spec_frame)
-    self.spectrogram.draw([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    self.figures = Figures(spec_frame)
 
     # ---- File Select ----
     file_select_frame = tk.Frame(self.__window, width=1000, height=100)

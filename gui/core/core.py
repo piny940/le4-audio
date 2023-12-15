@@ -4,7 +4,7 @@ from .constants import SR
 
 
 def load_waveform(filename):
-  x, _ = librosa.load(f'audio/{filename}.wav', sr=SR)
+  x, _ = librosa.load(filename, sr=SR)
   return x
 
 
