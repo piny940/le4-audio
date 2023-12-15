@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
@@ -16,14 +17,7 @@ class Figures:
     for ax in self.__fig.axes:
       self.__fig.delaxes(ax)
     ax1 = self.__fig.add_subplot(1, 2, 1)
-    ax1.set_xlabel('sec')
-    ax1.set_ylabel('frequency [Hz]')
-    ax1.imshow(
-        np.flipud(np.array(spectrogram).T),
-        extent=[0, len(spectrogram), 0, SR / 2],
-        aspect='auto',
-        interpolation='nearest'
-    )
+    Spectrogram(ax1).draw(spectrogram)
 
     ax2 = self.__fig.add_subplot(1, 2, 2)
     ax2.tick_params()
@@ -35,3 +29,18 @@ class Figures:
     )
     self.__fig.tight_layout()
     self.__fig.canvas.draw()
+
+
+class Spectrogram:
+  def __init__(self, ax: Axes):
+    self.__ax = ax
+    self.__ax.set_xlabel('sec')
+    self.__ax.set_ylabel('frequency [Hz]')
+
+  def draw(self, spectrogram):
+    self.__ax.imshow(
+        np.flipud(np.array(spectrogram).T),
+        extent=[0, len(spectrogram), 0, SR / 2],
+        aspect='auto',
+        interpolation='nearest'
+    )
