@@ -3,7 +3,7 @@ import tkinter as tk
 
 
 class Slider:
-  def __init__(self, frame, c: IController):
+  def __init__(self, frame: tk.Frame, c: IController):
     self.__frame = frame
     self.__c = c
 
@@ -15,6 +15,14 @@ class Slider:
         label=u'時間[sample]',
         orient=tk.HORIZONTAL,
         length=700,
-        width=40,
+        width=30,
     )
     slider.pack()
+
+
+class StartSlider(Slider):
+  def __init__(self, frame: tk.Frame, c: IController):
+    super().__init__(frame, c)
+
+  def draw(self, waveform):
+    super().draw(0, len(waveform) - 1)

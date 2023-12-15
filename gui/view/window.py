@@ -3,6 +3,7 @@ from .figures import Figures
 from .title import Title
 from .file_select import FileSelect
 from controller.interface import IController
+from .slider import StartSlider
 
 
 class Window:
@@ -35,5 +36,10 @@ class Window:
     file_select_frame.pack(side=tk.TOP)
     self.file_select = FileSelect(file_select_frame, self.__c)
     self.file_select.draw()
+
+    # ---- Start Slider ----
+    start_slider_frame = tk.Frame(self.__window, width=1000, height=100)
+    start_slider_frame.pack(side=tk.TOP)
+    self.start_slider = StartSlider(start_slider_frame, self.__c)
 
     self.__window.mainloop()

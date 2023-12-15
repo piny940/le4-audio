@@ -13,12 +13,14 @@ class Controller(IController):
   def main(self):
     plt.rcParams.update({'font.size': 6})
     self.__view.create_window()
+    self.__waveform = None
     self.__wave_range = None
 
   def load_file(self, filename):
-    waveform = load_waveform(filename)
-    self.__wave_range = WaveRange(waveform)
+    self.__waveform = load_waveform(filename)
+    self.__wave_range = WaveRange(self.__waveform)
     self.update_figures(self.__wave_range.get_waveform())
+    self.__view.start_slider.draw(self.__waveform)
 
   def update_figures(self, waveform):
     spec = spectrogram(waveform, SIZE_FRAME, SHIFT_SIZE)
