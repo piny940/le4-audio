@@ -9,3 +9,15 @@ class IController(metaclass=ABCMeta):
   @abstractmethod
   def load_file(self, filename):
     pass
+
+  @abstractmethod
+  def update_figures(self, waveform):
+    pass
+
+  @abstractmethod
+  def update_start(self, start):
+    pass
+
+  @abstractmethod
+  def update_end(self, end):
+    pass

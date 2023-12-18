@@ -20,10 +20,20 @@ class Controller(IController):
     self.__waveform = load_waveform(filename)
     self.__wave_range = WaveRange(self.__waveform)
     self.update_figures(self.__wave_range.get_waveform())
-    self.__view.start_slider.draw(self.__waveform)
-    self.__view.end_slider.draw(self.__waveform)
+    self.__view.start_slider.draw(self.__waveform, self.__wave_range.get_start())
+    self.__view.end_slider.draw(self.__waveform, self.__wave_range.get_end())
 
   def update_figures(self, waveform):
     spec = spectrogram(waveform, SIZE_FRAME, SHIFT_SIZE)
     f0s = get_f0s(waveform, SR, SIZE_FRAME)
     self.__view.figures.draw(spec, f0s)
+
+  def update_start(self, start):
+    self.__wave_range.set_start(start)
+    self.update_figures(self.__wave_range.get_waveform())
+    self.__view.start_slider.draw(self.__waveform, self.__wave_range.get_start())
+
+  def update_end(self, end):
+    self.__wave_range.set_end(end)
+    self.update_figures(self.__wave_range.get_waveform())
+    self.__view.end_slider.draw(self.__waveform, self.__wave_range.get_end())
