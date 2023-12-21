@@ -3,7 +3,7 @@ from matplotlib.axes import Axes
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
-from core.constants import SR, SHIFT_SIZE
+from core.constants import SR, SHIFT_SIZE, NOTES
 from core.wave_range import WaveRange
 
 class Figures:
@@ -51,7 +51,16 @@ class Melody:
     self.__ax.set_ylabel('melody')
 
   def draw(self, melody, wave_range: WaveRange):
-    self.__ax.plot(melody)
+    plt.plot(list(map(lambda x: x - NOTES[0], melody)))
+    plt.yticks(np.arange(24),
+           #  list(["A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4",
+           #        "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5",
+           #        "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5"])
+           list(["C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3",
+                 "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4",
+                 "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"])
+           )
+
     self.__ax.set_xlim(wave_range.get_start() // SHIFT_SIZE, min(wave_range.get_end() // SHIFT_SIZE, len(melody)))
 
 
