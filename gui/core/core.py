@@ -1,7 +1,7 @@
 import numpy as np
 import librosa
-from .constants import SR
-
+from .constants import SR, SIZE_FRAME, NOTES
+import math
 
 def load_waveform(filename):
   x, _ = librosa.load(filename, sr=SR)
@@ -59,3 +59,26 @@ def spectrogram(waveform, size_frame, size_shift):
     # 配列に保存
     spectrogram.append(fft_log_abs_spec)
   return spectrogram
+
+def hz2nn(frequency):
+  return int(round(12.0 * math.log(frequency / 440.0, 2) + 69))
+
+def nn2hz(nn):
+  return 440.0 * 2 ** ((nn - 69) / 12.0)
+
+def shs(spectrum, sample_rate, size_frame):
+  likelihood = np.zeros(len(NOTES))
+  for i in range(len(likelihood)):
+    base_freq = nn2hz(NOTES[i])
+    for j in range(1, 16):
+      freq = base_freq * j
+      fft_idx = int(freq * size_frame / sample_rate)
+      likelihood[i] += 0.8**j * np.exp(spectrum[fft_idx])
+  return NOTES[np.argmax(likelihood)]
+
+
+def get_melody(spectrogram):
+  melody = []
+  for spectrum in spectrogram:
+    melody.append(shs(spectrum, SR, SIZE_FRAME))
+  return melody
