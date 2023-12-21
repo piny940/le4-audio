@@ -9,7 +9,7 @@ from .slider import StartSlider, EndSlider
 class Window:
   def __init__(self, c: IController):
     # Window
-    self.__WindowWidth = 1000
+    self.__WindowWidth = 1300
     self.__WindowHeight = 700
 
     self.__c = c
