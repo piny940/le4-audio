@@ -9,7 +9,7 @@ from core.wave_range import WaveRange
 class Figures:
   def __init__(self, frame: tk.Frame):
     self.__frame = frame
-    self.__fig = plt.figure(figsize=(3, 2))
+    self.__fig = plt.figure(figsize=(5, 2))
     self.__spec_ax = None
     self.__melody_ax = None
     canvas = FigureCanvasTkAgg(self.__fig, master=self.__frame)
@@ -21,7 +21,7 @@ class Figures:
     self.__spec_ax = self.__fig.add_subplot(121)
     SpecWithF0s(self.__spec_ax).draw(spectrogram, f0s, wave_range)
     self.__melody_ax = self.__fig.add_subplot(122)
-    Melody(self.__melody_ax).draw(melody)
+    Melody(self.__melody_ax).draw(melody, wave_range)
     self.__fig.tight_layout()
     self.__fig.canvas.draw()
 

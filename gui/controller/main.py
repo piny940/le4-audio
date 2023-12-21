@@ -26,7 +26,8 @@ class Controller(IController):
   def update_figures(self, wave_range: WaveRange):
     spec = spectrogram(wave_range.get_all_waveform(), SIZE_FRAME, SHIFT_SIZE)
     f0s = get_f0s(wave_range.get_all_waveform(), SR, SIZE_FRAME)
-    self.__view.figures.draw(spec, f0s, wave_range)
+    melody = get_melody(spec)
+    self.__view.figures.draw(spec, f0s, melody, wave_range)
 
   def update_start(self, start: str):
     self.__wave_range.set_start(int(start))
