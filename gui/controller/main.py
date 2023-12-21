@@ -9,6 +9,9 @@ from core.wave_range import WaveRange
 class Controller(IController):
   def __init__(self):
     self.__view = Window(self)
+    self.__spec = None
+    self.__f0s = None
+    self.__melody = None
 
   def main(self):
     plt.rcParams.update({'font.size': 6})
@@ -19,16 +22,19 @@ class Controller(IController):
   def load_file(self, filename):
     self.__waveform = load_waveform(filename)
     self.__wave_range = WaveRange(self.__waveform)
+    self.calc()
     self.update_figures(self.__wave_range)
     self.__view.start_slider.draw(self.__waveform, self.__wave_range.get_start())
     self.__view.end_slider.draw(self.__waveform, self.__wave_range.get_end() -1)
 
-  def update_figures(self, wave_range: WaveRange):
-    spec = spectrogram(wave_range.get_all_waveform(), SIZE_FRAME, SHIFT_SIZE)
-    f0s = get_f0s(wave_range.get_all_waveform(), SR, SIZE_FRAME)
-    melody = get_melody(spec)
-    self.__view.figures.draw(spec, f0s, melody, wave_range)
+  def calc(self):
+    self.__spec = spectrogram(self.__waveform, SIZE_FRAME, SHIFT_SIZE)
+    self.__f0s = get_f0s(self.__waveform, SR, SIZE_FRAME)
+    self.__melody = get_melody(self.__spec)
 
+  def update_figures(self, wave_range: WaveRange):
+    self.__view.figures.draw(self.__spec, self.__f0s, self.__melody, wave_range)
+  
   def update_start(self, start: str):
     self.__wave_range.set_start(int(start))
     self.update_figures(self.__wave_range)
