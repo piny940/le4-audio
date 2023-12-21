@@ -7,10 +7,10 @@ class Slider:
     self.__frame = frame
     self.__c = c
     self.__command = command
+    self.__slider = None
 
   def draw(self, from_, to, value=None):
-    slider = tk.Scale(
-        value=value,
+    self.__slider = tk.Scale(
         command=self.__command,
         master=self.__frame,
         from_=from_,
@@ -20,7 +20,13 @@ class Slider:
         length=700,
         width=30,
     )
-    slider.pack()
+    self.__slider.set(value)
+    self.__slider.pack()
+
+  def get_value(self):
+    return self.__slider.get()
+  def set_value(self, value: int):
+    self.__slider.set(value)
 
 
 class StartSlider(Slider):
