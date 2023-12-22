@@ -62,7 +62,7 @@ class Controller(IController):
   def apply_voice_change(self):
     freq = self.__view.control_panel.voice_change.frequency_box.get_value()
     try:
-      freq = int(freq)
+      freq = float(freq)
       if freq < 0:
         raise Exception()
     except:
@@ -80,8 +80,8 @@ class Controller(IController):
     freq = self.__view.control_panel.tremolo.frequency_box.get_value()
     depth = self.__view.control_panel.tremolo.depth_box.get_value()
     try:
-      freq = int(freq)
-      depth = int(depth)
+      freq = float(freq)
+      depth = float(depth)
       if freq < 0 or depth < 0:
         raise Exception()
     except:
