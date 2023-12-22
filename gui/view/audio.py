@@ -23,7 +23,8 @@ class AudioPlayer:
     self.__play_obj = self.__wave_obj.play()
     
   def stop(self):
-    self.__play_obj.wait_done()
+    self.__play_obj.stop()
+    self.__play_obj = None
 
   def is_playing(self) -> bool:
     if self.__play_obj is None:

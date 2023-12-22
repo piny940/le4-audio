@@ -34,7 +34,7 @@ class Window:
     self.figures = Figures(spec_frame)
 
     # ---- File Select ----
-    middle_buttons_frame = tk.Frame(self.__window, width=1000, height=100, highlightbackground="red", highlightthickness=1)
+    middle_buttons_frame = tk.Frame(self.__window, width=1000, height=100)
     middle_buttons_frame.pack(side=tk.TOP)
     self.file_select = FileSelect(middle_buttons_frame, self.__c)
     self.file_select.draw()
