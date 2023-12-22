@@ -6,10 +6,25 @@ class ControlPanel:
   def __init__(self, frame: tk.Frame, c: IController):
     self.__frame = frame
     self.__c = c
-    self.__voice_change = TextBox(self.__frame, self.__c)
-    self.__voice_change_frame = tk.Frame(self.__frame, width=400, height=100)
-    self.__voice_change_frame.pack(side=tk.RIGHT)
+    self.__voice_change_frame = tk.Frame(
+      self.__frame,
+      width=400,
+      height=100,
+      padx=10,
+      pady=10
+    )
+    self.__voice_change = TextBox(self.__voice_change_frame, self.__c)
+    self.__voice_change_frame.pack(side=tk.LEFT)
+    self.__voice_change_frame1 = tk.Frame(self.__frame,
+      width=400,
+      height=100,
+      padx=10,
+      pady=10
+    )
+    self.__voice_change1 = TextBox(self.__voice_change_frame1, self.__c)
+    self.__voice_change_frame1.pack(side=tk.LEFT)
+
   
   def draw(self):
-    self.__voice_change.draw("Voice Change", 10)
-  
+    self.__voice_change.draw("Voice Change Frequency", 10)
+    self.__voice_change1.draw("Voice Change Duration", 10)

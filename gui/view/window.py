@@ -54,7 +54,9 @@ class Window:
       width=self.__WindowWidth,
       height=380,
       highlightbackground="white",
-      highlightthickness=1
+      highlightthickness=1,
+      padx=10,
+      pady=10
     )
     control_panel_frame.pack(side=tk.TOP)
     self.control_panel = ControlPanel(control_panel_frame, self.__c)
