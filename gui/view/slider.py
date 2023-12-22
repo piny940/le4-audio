@@ -20,7 +20,7 @@ class Slider:
         label=u'時間[sample]',
         orient=tk.HORIZONTAL,
         length=700,
-        width=30,
+        width=15,
     )
     self.__slider.set(value)
     self.__slider.pack()
