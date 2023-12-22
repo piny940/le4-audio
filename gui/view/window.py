@@ -26,7 +26,7 @@ class Window:
     # ---- Title -----
     title_frame = tk.Frame(self.__window, width=1000, height=100)
     title_frame.pack(side=tk.TOP)
-    self.title = Title(title_frame)
+    self.title = Title(title_frame, self.__c)
     self.title.draw()
 
     # ----Figures ----
