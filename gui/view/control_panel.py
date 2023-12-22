@@ -11,7 +11,9 @@ class ControlPanel:
       width=400,
       height=100,
       padx=10,
-      pady=10
+      pady=10,
+      highlightbackground="white",
+      highlightthickness=1
     )
     self.__voice_change = VoiceChangePanel(self.__voice_change_frame, self.__c)
     self.__voice_change_frame.pack(side=tk.LEFT)
