@@ -82,3 +82,15 @@ def get_melody(spectrogram):
   for spectrum in spectrogram:
     melody.append(shs(spectrum, SR, SIZE_FRAME))
   return melody
+
+def generate_sinusoid(sampling_rate, frequency, duration):
+  sampling_interval = 1.0 / sampling_rate
+  t = np.arange(sampling_rate * duration) * sampling_interval
+  waveform = np.sin(2.0 * math.pi * frequency * t)
+  return waveform
+
+def voice_change(waveform, sampling_rate, frequency):
+  duration = len(waveform)
+  sin_wave = generate_sinusoid(sampling_rate, frequency, duration / sampling_rate)
+  sin_wave = sin_wave * 0.9
+  return waveform * sin_wave
