@@ -5,6 +5,7 @@ from .file_select import FileSelect
 from controller.interface import IController
 from .slider import StartSlider, EndSlider
 from .text_box import TextBox
+from .control_panel import ControlPanel
 
 class Window:
   def __init__(self, c: IController):
@@ -47,10 +48,16 @@ class Window:
     end_slider_frame.pack(side=tk.TOP)
     self.end_slider = EndSlider(end_slider_frame, self.__c)
 
-    # ---- Voice Change ----
-    voice_change_frame = tk.Frame(self.__window, width=400, height=100)
-    voice_change_frame.pack(side=tk.TOP)
-    self.voice_change = TextBox(voice_change_frame, self.__c)
-    self.voice_change.draw("Voice Change", 10)
+    # ---- Control Panel ----
+    control_panel_frame = tk.Frame(
+      self.__window,
+      width=self.__WindowWidth,
+      height=380,
+      highlightbackground="white",
+      highlightthickness=1
+    )
+    control_panel_frame.pack(side=tk.TOP)
+    self.control_panel = ControlPanel(control_panel_frame, self.__c)
+    self.control_panel.draw()
 
     self.__window.mainloop()
