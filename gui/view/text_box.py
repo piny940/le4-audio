@@ -6,6 +6,7 @@ class TextBox:
     self.__frame = frame
     self.__c = c
     self.__text_box = None
+    self.__label = None
   
   def draw(self, label: str, width: int):
     if self.__text_box is not None:
@@ -14,6 +15,13 @@ class TextBox:
       master=self.__frame,
       width=width,
     )
+    if self.__label is not None:
+      self.__label.destroy()
+    self.__label = tk.Label(
+      master=self.__frame,
+      text=label,
+    )
+    self.__label.pack()
     self.__text_box.pack()
   
   def get_value(self):
