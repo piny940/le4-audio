@@ -10,6 +10,8 @@ class Slider:
     self.__slider = None
 
   def draw(self, from_, to, value=None):
+    if self.__slider is not None:
+      self.__slider.destroy()
     self.__slider = tk.Scale(
         command=self.__command,
         master=self.__frame,
@@ -18,7 +20,7 @@ class Slider:
         label=u'時間[sample]',
         orient=tk.HORIZONTAL,
         length=700,
-        width=30,
+        width=15,
     )
     self.__slider.set(value)
     self.__slider.pack()

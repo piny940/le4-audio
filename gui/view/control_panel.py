@@ -1,0 +1,22 @@
+import tkinter as tk
+from controller.interface import IController
+from .voice_change_panel import VoiceChangePanel
+
+class ControlPanel:
+  def __init__(self, frame: tk.Frame, c: IController):
+    self.__frame = frame
+    self.__c = c
+    self.__voice_change_frame = tk.Frame(
+      self.__frame,
+      width=400,
+      height=100,
+      padx=10,
+      pady=10,
+      highlightbackground="white",
+      highlightthickness=1
+    )
+    self.__voice_change = VoiceChangePanel(self.__voice_change_frame, self.__c)
+    self.__voice_change_frame.pack(side=tk.LEFT)
+  
+  def draw(self):
+    self.__voice_change.draw()
