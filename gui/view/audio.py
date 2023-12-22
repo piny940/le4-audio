@@ -9,7 +9,12 @@ class AudioPlayer:
   
   def set_wave(self, waveform):
     self.__waveform = waveform
-    self.__wave_obj = sa.WaveObject(waveform, 1, 2, SR)
+    self.__wave_obj = sa.WaveObject(
+      waveform,
+      sample_rate=SR,
+      num_channels=1,
+      bytes_per_sample=4
+    )
   
   def play(self):
     if self.__waveform is None:
