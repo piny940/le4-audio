@@ -26,7 +26,8 @@ class Controller(IController):
     self.__wave_range = WaveRange(self.__waveform)
     self.calc()
     self.update_figures(self.__wave_range)
-    self.update_play_button()
+    self.__view.play_button.draw()
+    self.__view.stop_button.draw()
     self.__view.start_slider.draw(self.__waveform, self.__wave_range.get_start())
     self.__view.end_slider.draw(self.__waveform, self.__wave_range.get_end() -1)
     self.__view.control_panel.draw()
@@ -49,15 +50,12 @@ class Controller(IController):
     self.update_figures(self.__wave_range)
     self.__view.end_slider.set_value(self.__wave_range.get_end() - 1)
 
-  def update_play_button(self):
-    self.__view.play_button.draw(self.__audio_player.is_playing())
-
   def play(self):
-    if self.__audio_player.is_playing():
-      self.__audio_player.stop()
-    else:
-      start = self.__wave_range.get_start()
-      end = self.__wave_range.get_end()
-      self.__audio_player.set_wave(self.__waveform[start:end])
-      self.__audio_player.play()
-    self.update_play_button()
+    start = self.__wave_range.get_start()
+    end = self.__wave_range.get_end()
+    self.__audio_player.set_wave(self.__waveform[start:end])
+    self.__audio_player.play()
+  
+  def stop(self):
+    print("controller stop")
+    self.__audio_player.stop()
