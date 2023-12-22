@@ -70,7 +70,7 @@ class Controller(IController):
     start = self.__wave_range.get_start()
     end = self.__wave_range.get_end()
     self.__waveform[start:end] = voice_change(
-      self.__wave_range.get_waveform(),
+      self.__waveform[start:end],
       SR, freq
     )
     self.calc()
@@ -90,7 +90,7 @@ class Controller(IController):
     start = self.__wave_range.get_start()
     end = self.__wave_range.get_end()
     self.__waveform[start:end] = tremolo(
-      self.__wave_range.get_waveform(),
+      self.__waveform[start:end],
       SR, freq, depth
     )
     self.calc()
