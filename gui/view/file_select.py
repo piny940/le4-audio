@@ -1,7 +1,6 @@
 import tkinter as tk
 from controller.interface import IController
 
-
 class FileSelect:
   def __init__(self, frame: tk.Frame, c: IController):
     self.__frame = frame

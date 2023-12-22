@@ -1,18 +1,13 @@
 import tkinter as tk
 from controller.interface import IController
+from .view_base import ViewBase
 
-class PlayButton:
-  def __init__(self, frame: tk.Frame, c: IController):
-    self.__frame = frame
-    self.__c = c
-    self.__button = None
-  
+class PlayButton(ViewBase):
   def draw(self):
-    if self.__button is not None:
-      self.__button.destroy()
-    self.__button = tk.Button(
-      master=self.__frame,
+    self.button = tk.Button(
+      master=self._frame,
       text="Play",
-      command=self.__c.play
+      command=self._c.play
     )
-    self.__button.pack(side=tk.LEFT)
+    self.button.pack(side=tk.LEFT)
+    self._set([self.button])

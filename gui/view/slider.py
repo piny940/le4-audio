@@ -1,20 +1,16 @@
 from controller.interface import IController
 import tkinter as tk
+from .view_base import ViewBase
 
-
-class Slider:
+class Slider(ViewBase):
   def __init__(self, frame: tk.Frame, c: IController, command=None):
-    self.__frame = frame
-    self.__c = c
     self.__command = command
-    self.__slider = None
+    super().__init__(frame, c)
 
   def draw(self, from_, to, value=None):
-    if self.__slider is not None:
-      self.__slider.destroy()
-    self.__slider = tk.Scale(
+    self.slider = tk.Scale(
         command=self.__command,
-        master=self.__frame,
+        master=self._frame,
         from_=from_,
         to=to,
         label=u'時間[sample]',
@@ -22,13 +18,14 @@ class Slider:
         length=700,
         width=15,
     )
-    self.__slider.set(value)
-    self.__slider.pack()
+    self.slider.set(value)
+    self.slider.pack()
+    self._set([self.slider])
 
   def get_value(self):
-    return self.__slider.get()
+    return self.slider.get()
   def set_value(self, value: int):
-    self.__slider.set(value)
+    self.slider.set(value)
 
 
 class StartSlider(Slider):
