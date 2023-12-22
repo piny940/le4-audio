@@ -26,6 +26,7 @@ class Controller(IController):
     self.update_figures(self.__wave_range)
     self.__view.start_slider.draw(self.__waveform, self.__wave_range.get_start())
     self.__view.end_slider.draw(self.__waveform, self.__wave_range.get_end() -1)
+    print("loadfile", self.__wave_range.get_end())
 
   def calc(self):
     self.__spec = spectrogram(self.__waveform, SIZE_FRAME, SHIFT_SIZE)

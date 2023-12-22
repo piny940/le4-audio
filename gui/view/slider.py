@@ -10,6 +10,8 @@ class Slider:
     self.__slider = None
 
   def draw(self, from_, to, value=None):
+    if self.__slider is not None:
+      self.__slider.destroy()
     self.__slider = tk.Scale(
         command=self.__command,
         master=self.__frame,
