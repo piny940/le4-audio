@@ -1,15 +1,12 @@
 import tkinter as tk
-from controller.interface import IController
+from .view_base import ViewBase
 
-class FileSelect:
-  def __init__(self, frame: tk.Frame, c: IController):
-    self.__frame = frame
-    self.__c = c
-
+class FileSelect(ViewBase):
   def draw(self):
-    button = tk.Button(self.__frame, text='ファイルを選択', command=self.__button_clicked)
-    button.pack(side=tk.LEFT)
+    self.button = tk.Button(self._frame, text='ファイルを選択', command=self.__button_clicked)
+    self.button.pack(side=tk.LEFT)
+    self._set([self.button])
 
   def __button_clicked(self):
     filename = tk.filedialog.askopenfilename()
-    self.__c.load_file(filename)
+    self._c.load_file(filename)

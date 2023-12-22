@@ -1,5 +1,4 @@
 import tkinter as tk
-from controller.interface import IController
 from .view_base import ViewBase
 
 class StopButton(ViewBase):
