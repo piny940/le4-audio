@@ -4,6 +4,7 @@ from core.core import *
 from core.constants import SR, SIZE_FRAME, SHIFT_SIZE
 import matplotlib.pyplot as plt
 from core.wave_range import WaveRange
+from view.audio import AudioPlayer
 
 
 class Controller(IController):
@@ -12,6 +13,7 @@ class Controller(IController):
     self.__spec = None
     self.__f0s = None
     self.__melody = None
+    self.__audio_player = AudioPlayer()
 
   def main(self):
     plt.rcParams.update({'font.size': 6})
@@ -24,6 +26,7 @@ class Controller(IController):
     self.__wave_range = WaveRange(self.__waveform)
     self.calc()
     self.update_figures(self.__wave_range)
+    self.update_play_button()
     self.__view.start_slider.draw(self.__waveform, self.__wave_range.get_start())
     self.__view.end_slider.draw(self.__waveform, self.__wave_range.get_end() -1)
     self.__view.control_panel.draw()
@@ -40,8 +43,21 @@ class Controller(IController):
     self.__wave_range.set_start(int(start))
     self.update_figures(self.__wave_range)
     self.__view.start_slider.set_value(self.__wave_range.get_start())
-
+  
   def update_end(self, end: str):
     self.__wave_range.set_end(int(end))
     self.update_figures(self.__wave_range)
     self.__view.end_slider.set_value(self.__wave_range.get_end() - 1)
+
+  def update_play_button(self):
+    self.__view.play_button.draw(self.__audio_player.is_playing())
+
+  def play(self):
+    if self.__audio_player.is_playing():
+      self.__audio_player.stop()
+    else:
+      start = self.__wave_range.get_start()
+      end = self.__wave_range.get_end()
+      self.__audio_player.set_wave(self.__waveform[start:end])
+      self.__audio_player.play()
+    self.update_play_button()

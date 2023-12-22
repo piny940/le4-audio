@@ -9,7 +9,7 @@ class FileSelect:
 
   def draw(self):
     button = tk.Button(self.__frame, text='ファイルを選択', command=self.__button_clicked)
-    button.pack()
+    button.pack(side=tk.LEFT)
 
   def __button_clicked(self):
     filename = tk.filedialog.askopenfilename()

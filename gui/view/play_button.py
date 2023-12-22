@@ -16,4 +16,4 @@ class PlayButton:
       text=label,
       command=self.__c.play
     )
-    self.__button.pack()
+    self.__button.pack(side=tk.LEFT)

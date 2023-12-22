@@ -23,5 +23,9 @@ class IController(metaclass=ABCMeta):
     pass
 
   @abstractmethod
+  def update_play_button(self):
+    pass
+
+  @abstractmethod
   def play(self):
     pass
