@@ -1,6 +1,6 @@
 import tkinter as tk
 from controller.interface import IController
-from .text_box import TextBox
+from .voice_change_panel import VoiceChangePanel
 
 class ControlPanel:
   def __init__(self, frame: tk.Frame, c: IController):
@@ -13,8 +13,8 @@ class ControlPanel:
       padx=10,
       pady=10
     )
-    self.__voice_change = TextBox(self.__voice_change_frame, self.__c)
+    self.__voice_change = VoiceChangePanel(self.__voice_change_frame, self.__c)
     self.__voice_change_frame.pack(side=tk.LEFT)
   
   def draw(self):
-    self.__voice_change.draw("Voice Change Frequency", 10)
+    self.__voice_change.draw()
