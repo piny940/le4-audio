@@ -1,5 +1,4 @@
 import tkinter as tk
-from controller.interface import IController
 from .text_box import TextBox
 from .view_base import ViewBase
 

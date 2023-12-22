@@ -1,28 +1,20 @@
 import tkinter as tk
 from controller.interface import IController
+from .view_base import ViewBase
 
-class TextBox:
-  def __init__(self, frame: tk.Frame, c: IController):
-    self.__frame = frame
-    self.__c = c
-    self.__text_box = None
-    self.__label = None
-  
-  def draw(self, label: str, width: int):
-    if self.__text_box is not None:
-      self.__text_box.destroy()
+class TextBox(ViewBase):
+  def draw(self, label_str: str, width: int):
     self.__text_box = tk.Entry(
-      master=self.__frame,
+      master=self._frame,
       width=width,
     )
-    if self.__label is not None:
-      self.__label.destroy()
-    self.__label = tk.Label(
-      master=self.__frame,
-      text=label,
+    label = tk.Label(
+      master=self._frame,
+      text=label_str,
     )
-    self.__label.pack()
+    label.pack()
     self.__text_box.pack()
+    self._set([label, self.__text_box])
   
   def get_value(self):
     return self.__text_box.get()
