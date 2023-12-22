@@ -16,14 +16,14 @@ class VoiceChangePanel(ViewBase):
       padx=10,
       pady=10
     )
-    frequency_box = TextBox(text_boxes_frame, self._c)
+    self.frequency_box = TextBox(text_boxes_frame, self._c)
     apply_button = tk.Button(
       master=self._frame,
       text="Apply",
-      command=None # TODO
+      command=self._c.apply_voice_change
     )
     title.pack(side=tk.TOP)
     text_boxes_frame.pack(side=tk.TOP)
     apply_button.pack(side=tk.TOP)
-    frequency_box.draw("Frequency", 10)
-    self._set([title, frequency_box, apply_button])
+    self.frequency_box.draw("Frequency", 10)
+    self._set([title, self.frequency_box, apply_button])

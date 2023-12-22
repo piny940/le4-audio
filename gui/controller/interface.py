@@ -29,4 +29,8 @@ class IController(metaclass=ABCMeta):
   @abstractmethod
   def stop(self):
     pass
+
+  @abstractmethod
+  def apply_voice_change(self):
+    pass
   

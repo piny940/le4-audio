@@ -14,7 +14,7 @@ class ControlPanel(ViewBase):
       highlightbackground="white",
       highlightthickness=1
     )
-    voice_change = VoiceChangePanel(vc_frame, self._c)
+    self.voice_change = VoiceChangePanel(vc_frame, self._c)
     vc_frame.pack(side=tk.LEFT)
-    voice_change.draw()
+    self.voice_change.draw()
     self._set([vc_frame])

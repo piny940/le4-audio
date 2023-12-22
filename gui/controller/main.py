@@ -58,3 +58,20 @@ class Controller(IController):
   
   def stop(self):
     self.__audio_player.stop()
+  
+  def apply_voice_change(self):
+    freq = self.__view.control_panel.voice_change.frequency_box.get_value()
+    try:
+      freq = int(freq)
+      if freq < 0:
+        raise Exception()
+    except:
+      return
+    start = self.__wave_range.get_start()
+    end = self.__wave_range.get_end()
+    self.__waveform[start:end] = voice_change(
+      self.__wave_range.get_waveform(),
+      SR, freq
+    )
+    self.calc()
+    self.update_figures(self.__wave_range)
