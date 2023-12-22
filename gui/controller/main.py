@@ -57,5 +57,4 @@ class Controller(IController):
     self.__audio_player.play()
   
   def stop(self):
-    print("controller stop")
     self.__audio_player.stop()

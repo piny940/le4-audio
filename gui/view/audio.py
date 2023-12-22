@@ -20,9 +20,13 @@ class AudioPlayer:
     if self.__waveform is None:
       print("No waveform to play")
       return
+    if self.__play_obj is not None:
+      self.__play_obj.stop()
     self.__play_obj = self.__wave_obj.play()
     
   def stop(self):
+    if self.__play_obj is None:
+      return
     self.__play_obj.stop()
     self.__play_obj = None
 
