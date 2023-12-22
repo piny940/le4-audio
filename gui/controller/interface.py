@@ -33,4 +33,8 @@ class IController(metaclass=ABCMeta):
   @abstractmethod
   def apply_voice_change(self):
     pass
+
+  @abstractmethod
+  def apply_tremolo(self):
+    pass
   

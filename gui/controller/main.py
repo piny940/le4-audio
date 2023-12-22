@@ -75,3 +75,23 @@ class Controller(IController):
     )
     self.calc()
     self.update_figures(self.__wave_range)
+  
+  def apply_tremolo(self):
+    freq = self.__view.control_panel.tremolo.frequency_box.get_value()
+    depth = self.__view.control_panel.tremolo.depth_box.get_value()
+    try:
+      freq = int(freq)
+      depth = int(depth)
+      if freq < 0 or depth < 0:
+        raise Exception()
+    except:
+      return
+
+    start = self.__wave_range.get_start()
+    end = self.__wave_range.get_end()
+    self.__waveform[start:end] = tremolo(
+      self.__wave_range.get_waveform(),
+      SR, freq, depth
+    )
+    self.calc()
+    self.update_figures(self.__wave_range)

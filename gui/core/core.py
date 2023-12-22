@@ -94,3 +94,8 @@ def voice_change(waveform, sampling_rate, frequency):
   sin_wave = generate_sinusoid(sampling_rate, frequency, duration / sampling_rate)
   sin_wave = sin_wave * 0.9
   return waveform * sin_wave
+
+def tremolo(waveform, sampling_rate, frequency, depth):
+  tremolo_waveform = generate_sinusoid(sampling_rate, frequency, len(waveform) / sampling_rate)
+  changed = waveform * (1.0 + depth * tremolo_waveform)
+  return changed / np.max(np.abs(changed))
