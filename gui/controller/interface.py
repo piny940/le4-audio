@@ -21,3 +21,7 @@ class IController(metaclass=ABCMeta):
   @abstractmethod
   def update_end(self, end):
     pass
+
+  @abstractmethod
+  def play(self):
+    pass

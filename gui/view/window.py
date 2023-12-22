@@ -33,9 +33,9 @@ class Window:
     self.figures = Figures(spec_frame)
 
     # ---- File Select ----
-    file_select_frame = tk.Frame(self.__window, width=1000, height=100)
-    file_select_frame.pack(side=tk.TOP)
-    self.file_select = FileSelect(file_select_frame, self.__c)
+    middle_buttons_frame = tk.Frame(self.__window, width=1000, height=100)
+    middle_buttons_frame.pack(side=tk.LEFT)
+    self.file_select = FileSelect(middle_buttons_frame, self.__c)
     self.file_select.draw()
 
     # ---- Start Slider ----
