@@ -8,6 +8,7 @@ from .text_box import TextBox
 from .control_panel import ControlPanel
 from .play_button import PlayButton
 from .stop_button import StopButton
+from .reset_button import ResetButton
 
 class Window:
   def __init__(self, c: IController):
@@ -42,6 +43,8 @@ class Window:
     # ---- Play Button ----
     self.play_button = PlayButton(middle_buttons_frame, self.__c)
     self.stop_button = StopButton(middle_buttons_frame, self.__c)
+    # ---- Reset Button ----
+    self.reset_button = ResetButton(middle_buttons_frame, self.__c)
 
     # ---- Start Slider ----
     start_slider_frame = tk.Frame(self.__window, width=1000, height=50)

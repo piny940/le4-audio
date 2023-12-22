@@ -38,3 +38,6 @@ class IController(metaclass=ABCMeta):
   def apply_tremolo(self):
     pass
   
+  @abstractmethod
+  def reset(self):
+    pass

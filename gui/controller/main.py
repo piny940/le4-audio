@@ -14,6 +14,7 @@ class Controller(IController):
     self.__f0s = None
     self.__melody = None
     self.__audio_player = AudioPlayer()
+    self.__original = None
 
   def main(self):
     plt.rcParams.update({'font.size': 6})
@@ -23,11 +24,13 @@ class Controller(IController):
 
   def load_file(self, filename):
     self.__waveform = load_waveform(filename)
+    self.__original = self.__waveform.copy()
     self.__wave_range = WaveRange(self.__waveform)
     self.calc()
     self.update_figures(self.__wave_range)
     self.__view.play_button.draw()
     self.__view.stop_button.draw()
+    self.__view.reset_button.draw()
     self.__view.start_slider.draw(self.__waveform, self.__wave_range.get_start())
     self.__view.end_slider.draw(self.__waveform, self.__wave_range.get_end() -1)
     self.__view.control_panel.draw()
@@ -93,5 +96,10 @@ class Controller(IController):
       self.__waveform[start:end],
       SR, freq, depth
     )
+    self.calc()
+    self.update_figures(self.__wave_range)
+  
+  def reset(self):
+    self.__waveform = self.__original.copy()
     self.calc()
     self.update_figures(self.__wave_range)
