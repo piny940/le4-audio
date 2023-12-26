@@ -51,10 +51,31 @@ lineskip=-0.5ex
 \newpage
 
 \section{機能・プログラム説明}
-課題1の演習として複数の機能を実装した。この章ではそれらの機能について説明する。
+
+課題1では音声の基本的な情報を表示するプログラムを作成した。
+この章では作成した具体的な機能について説明する。
+画面全体は図\ref{fig:work2_app}のようになっている。下のVoice ChangeやTremoloの部分は
+課題2の機能のため、本レポートでは説明しない。
+
+\begin{figure}[h]
+\centering
+\includegraphics[keepaspectratio, width=13cm]
+{./images/work2_app.png}
+\caption{画面全体}
+\label{fig:work2_app}
+\end{figure}
+
 \subsection{ファイル選択}
-ファイル選択機能を実装した。ファイル選択ボタンを押すと、ファイル選択ダイアログが表示される。
+ファイル選択機能を実装した。ファイル選択ボタン(図\ref{fig:select_file})を押すと、ファイル選択ダイアログが表示される。
 選択したファイルを読み取り、表示対象の音声データとして扱う。
+
+\begin{figure}[h]
+\centering
+\includegraphics[keepaspectratio, scale = 1.0]
+{./images/select_file.png}
+\caption{ファイル選択ボタン}
+\label{fig:select_file}
+\end{figure}
 
 ファイル読み取りのプログラムはコード\ref{code:load_file1}, \ref{code:load_file2}の通りである。
 コード\ref{code:load_file1}はtkinterのfiledialogを用いてファイル選択ダイアログを表示し、
@@ -185,7 +206,70 @@ yticksでy軸のラベルを設定している。ラベルの内容はC3からB4
 
 \subsection{音声の再生・停止}
 
+選択したファイルの音声を再生・停止する機能を実装した。
+コード\ref{code:play}は音声を再生するプログラムである。
+既に音声が再生中の場合は、一旦再生を停止してから再度再生をすることで、
+同じ音声を連続して再生することができる。
+
+\begin{lstlisting}[caption=音声再生,label=code:play]
+  if self.__play_obj is not None:
+    self.__play_obj.stop()
+  self.__play_obj = self.__wave_obj.play()
+\end{lstlisting}
+
+コード\ref{code:stop}は音声を停止するプログラムである。
+音声が再生中の場合のみ、音声を停止する。
+
+\begin{lstlisting}[caption=音声停止,label=code:stop]
+  if self.__play_obj is None:
+    return
+  self.__play_obj.stop()
+  self.__play_obj = None
+
+\end{lstlisting}
+
 \subsection{表示区間・再生区間の限定}
+
+スペクトログラムや音程の表示、及び音声の再生区間を限定する機能を実装した。
+コード\ref{code:limit}は表示区間・再生区間を限定するプログラムである。
+startの値はendの値より大きくならないようバリデーションを行った。
+
+\begin{lstlisting}[caption=表示区間・再生区間の限定,label=code:limit]
+  def set_start(self, start: int):
+    if start >= self.__end - self.MIN_SIZE:
+      return
+    self.__start = start
+
+  def set_end(self, end: int):
+    if end <= self.__start + self.MIN_SIZE:
+      return
+    self.__end = end
+\end{lstlisting}
+
+コード\ref{code:show_limit}は区間を限定するUIを表示するプログラムである。
+tkinterのScaleを用いて、スライダーのUIを表示している。
+このコードにより、図\ref{fig:sliders}のようなUIが表示される。
+
+\begin{lstlisting}[caption=区間を限定するUI,label=code:show_limit]
+  self.slider = tk.Scale(
+    command=self.__command,
+    master=self._frame,
+    from_=from_,
+    to=to,
+    label=u'時間[sample]',
+    orient=tk.HORIZONTAL,
+    length=700,
+    width=15,
+  )
+\end{lstlisting}
+
+\begin{figure}[h]
+\centering
+\includegraphics[keepaspectratio, width = 13cm]
+{./images/sliders.png}
+\caption{区間を限定するUI}
+\label{fig:sliders}
+\end{figure}
 
 \section{実行例とテスト}
 \subsection{ファイル選択}
