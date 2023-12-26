@@ -43,4 +43,4 @@ class TremoloPanel(ViewBase):
     apply_button.pack(side=tk.TOP)
     self.frequency_box.draw("Frequency", 10)
     self.depth_box.draw("Depth", 10)
-    self._set([title, self.frequency_box, apply_button])
+    self._set([title, self.frequency_box, self.depth_box, apply_button])
