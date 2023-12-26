@@ -37,6 +37,10 @@ class IController(metaclass=ABCMeta):
   @abstractmethod
   def apply_tremolo(self):
     pass
+
+  @abstractmethod
+  def apply_vibrato(self):
+    pass
   
   @abstractmethod
   def reset(self):

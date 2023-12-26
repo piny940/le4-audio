@@ -99,6 +99,29 @@ class Controller(IController):
     self.calc()
     self.update_figures(self.__wave_range)
   
+  def apply_vibrato(self):
+    freq = self.__view.control_panel.vibrato.frequency_box.get_value()
+    depth = self.__view.control_panel.vibrato.depth_box.get_value()
+    tau = self.__view.control_panel.vibrato.tau_box.get_value()
+
+    try:
+      freq = float(freq)
+      depth = float(depth)
+      tau = float(tau)
+      if freq < 0 or depth < 0 or tau < 0:
+        raise Exception()
+    except:
+      return
+
+    start = self.__wave_range.get_start()
+    end = self.__wave_range.get_end()
+    self.__waveform[start:end] = vibrato(
+      self.__waveform[start:end],
+      SR, freq, depth, tau
+    )
+    self.calc()
+    self.update_figures(self.__wave_range)
+  
   def reset(self):
     self.__waveform = self.__original.copy()
     self.calc()

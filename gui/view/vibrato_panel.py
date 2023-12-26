@@ -43,7 +43,7 @@ class VibratoPanel(ViewBase):
     apply_button = tk.Button(
       master=self._frame,
       text="Apply",
-      command=self._c.apply_tremolo
+      command=self._c.apply_vibrato
     )
     title.pack(side=tk.TOP)
     text_boxes_frame.pack(side=tk.TOP)
