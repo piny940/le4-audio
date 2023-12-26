@@ -99,3 +99,15 @@ def tremolo(waveform, sampling_rate, frequency, depth):
   tremolo_waveform = generate_sinusoid(sampling_rate, frequency, len(waveform) / sampling_rate)
   changed = waveform * (1.0 + depth * tremolo_waveform)
   return changed / np.max(np.abs(changed))
+
+def vibrato(waveform, sampling_rate: int, frequency: float, depth: float, tau: float):
+  vibrato_waveform = generate_sinusoid(sampling_rate, frequency, len(waveform) / sampling_rate)
+  changed = waveform.copy()
+  for i in range(len(waveform)):
+    taui = int(tau + depth * vibrato_waveform[i])
+    if taui < 0:
+      taui = 0
+    elif taui >= len(waveform):
+      taui = len(waveform) - 1
+    changed[i] = waveform[i - taui]
+  return changed
