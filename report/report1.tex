@@ -42,13 +42,176 @@ lineskip=-0.5ex
 
 \begin{document}
 
-\title{タイトル}
+\title{計算機科学実験4 音声 レポート1}
 \author{安済翔真}
 \date{\today}
 \maketitle
 
+\tableofcontents
+\newpage
 
-ほげ！
+\section{機能・プログラム説明}
+課題1の演習として複数の機能を実装した。この章ではそれらの機能について説明する。
+\subsection{ファイル選択}
+ファイル選択機能を実装した。ファイル選択ボタンを押すと、ファイル選択ダイアログが表示される。
+選択したファイルを読み取り、表示対象の音声データとして扱う。
+
+ファイル読み取りのプログラムはコード\ref{code:load_file1}, \ref{code:load_file2}の通りである。
+コード\ref{code:load_file1}はtkinterのfiledialogを用いてファイル選択ダイアログを表示し、
+選択したファイル名を取得する。コード\ref{code:load_file2}はlibrosaを用いて音声データを読み取る。
+
+\begin{lstlisting}[caption=ファイル読み取り1,label=code:load_file1]
+  filename = tk.filedialog.askopenfilename()
+  self._c.load_file(filename)
+\end{lstlisting}
+
+\begin{lstlisting}[caption=ファイル読み取り2,label=code:load_file2]
+def load_waveform(filename):
+  x, _ = librosa.load(filename, sr=SR)
+  return x
+\end{lstlisting}
+
+\subsection{スペクトログラムの表示}
+選択したファイルの音声のスペクトログラムを表示する機能を実装した。
+コード\ref{code:calc_spectrogram}はスペクトログラムを計算するプログラムである。
+numpyのhamming関数を用いて窓掛けを行い、FFTを行う。
+その後、対数振幅スペクトルを計算し、配列に保存する。
+
+\begin{lstlisting}[caption=スペクトログラム計算,label=code:calc_spectrogram]
+def spectrogram(waveform, size_frame, size_shift):
+  spectrogram = []
+  hamming_window = np.hamming(size_frame)
+
+  for i in np.arange(0, len(waveform) - size_frame, size_shift):
+    idx = int(i)
+    x_frame = waveform[idx: idx + size_frame]
+
+    # 窓掛けしたデータをFFT
+    fft_spec = np.fft.rfft(x_frame * hamming_window)
+
+    # 振幅スペクトルを対数化
+    fft_log_abs_spec = np.log(np.abs(fft_spec))
+
+    # 配列に保存
+    spectrogram.append(fft_log_abs_spec)
+  return spectrogram
+\end{lstlisting}
+
+コード\ref{code:show_spectrogram}はスペクトログラムを表示するプログラムである。
+matplotlibのimshow関数を用いてスペクトログラムを表示する。
+\begin{lstlisting}[caption=スペクトログラム表示,label=code:show_spectrogram]
+self.__ax.imshow(
+    np.flipud(np.array(spectrogram).T),
+    extent=[0, len(spectrogram), 0, SR / 2],
+    aspect='auto',
+    interpolation='nearest',
+)
+self.__ax.set_ylim(0, 3000)
+\end{lstlisting}
+
+\subsection{基本周波数の表示}
+選択したファイルの音声の基本周波数を表示する機能を実装した。
+コード\ref{code:calc_f0}は基本周波数を計算するプログラムである。
+まず、numpyのcorrelate関数を用いて自己相関係数を計算する。
+その後、ピークを検出し、ピークのインデックスを取得する。
+最後に、ピークのインデックスから基本周波数を計算する。
+
+\begin{lstlisting}[caption=基本周波数計算,label=code:calc_f0]
+def get_f0(waveform, sampling_rate):
+  autocorr = np.correlate(waveform, waveform, 'full')
+  autocorr = autocorr[len(autocorr) // 2:]  # 不要な前半を捨てる
+
+  # ピークを検出
+  peak_indices = [i for i in range(len(autocorr)) if is_peak(autocorr, i)]
+  peak_indices = [i for i in peak_indices if i != 0]  # 最初のピークは除く
+
+  if len(peak_indices) == 0:
+    return 0
+
+  max_peak_index = max(peak_indices, key=lambda index: autocorr[index])
+
+  # 基本周波数を推定
+  f0 = sampling_rate / max_peak_index
+  return f0
+\end{lstlisting}
+
+コード\ref{code:show_f0}は基本周波数を表示するプログラムである。
+matplotlibのplot関数を用いて基本周波数を表示する。
+スペクトログラムと同じx軸を用いるため、x軸のデータはスペクトログラムのデータを用いる。
+
+\begin{lstlisting}[caption=基本周波数表示,label=code:show_f0]
+  x_data = np.linspace(0, len(spectrogram), len(f0s))
+  self.__ax.plot(x_data, f0s)
+\end{lstlisting}
+
+\subsection{音程の表示}
+選択したファイルの音声の音程を表示する機能を実装した。
+コード\ref{code:calc_pitch}は音程を計算するプログラムである。
+nn2hz関数はMIDIノートナンバーを周波数に変換する関数である。
+shs関数はスペクトルを用いて音程を計算する関数である。
+候補の音程(NOTES)の各周波数について、スペクトルの対数振幅スペクトルを用いて尤度を計算する。
+尤度を計算する際は、対象の音程の「倍音」の強さも考慮した。特に、倍音の強さは
+0.8の指数関数的な減衰を考慮することで精度が大幅に向上した。
+
+\begin{lstlisting}[caption=音程計算,label=code:calc_pitch]
+def nn2hz(nn):
+  return 440.0 * 2 ** ((nn - 69) / 12.0)
+
+def shs(spectrum, sample_rate, size_frame):
+  likelihood = np.zeros(len(NOTES))
+  for i in range(len(likelihood)):
+    base_freq = nn2hz(NOTES[i])
+    for j in range(1, 16):
+      freq = base_freq * j
+      fft_idx = int(freq * size_frame / sample_rate)
+      likelihood[i] += 0.8**j * np.exp(spectrum[fft_idx])
+  return NOTES[np.argmax(likelihood)]
+
+\end{lstlisting}
+
+コード\ref{code:show_pitch}は音程を表示するプログラムである。
+matplotlibのplot関数を用いて音程を表示する。
+yticksでy軸のラベルを設定している。ラベルの内容はC3からB4までの音程を表示することで、
+表示される音程がわかりやすくなるようにした。
+
+\begin{lstlisting}[caption=音程表示,label=code:show_pitch]
+  plt.plot(list(map(lambda x: x - NOTES[0], melody)))
+  plt.yticks(np.arange(24),
+         list(["C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3",
+               "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4",
+               "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"])
+         )
+\end{lstlisting}
+
+\subsection{音声の再生・停止}
+
+\subsection{表示区間・再生区間の限定}
+
+\section{実行例とテスト}
+\subsection{ファイル選択}
+
+\subsection{スペクトログラムの表示}
+
+\subsection{基本周波数の表示}
+
+\subsection{音程の表示}
+
+\subsection{音声の再生・停止}
+
+\subsection{表示区間・再生区間の限定}
+
+\section{工夫点}
+\subsection{ファイル選択機能}
+
+\subsection{区間選択機能}
+startの値がendの値より大きくならないようバリデーションを行った。
+
+\subsection{音程の表示}
+
+\subsection{音声の再生・停止機能}
+
+
+\section{考察}
 
 % \printbibliography[title=参考文献]
 
