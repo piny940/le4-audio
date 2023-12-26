@@ -17,26 +17,31 @@
 \def\theequation{\thesection.\arabic{equation}}
 \makeatother
 
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
 % listings(ソースコード)
 \usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \lstset{
-basicstyle={\ttfamily},
-identifierstyle={\small}
-commentstyle={\smallitshape},
-keywordstyle={\small\bfseries},
-ndkeywordstyle={\small},
-stringstyle={\small\ttfamily},
-frame={tb},
-breaklines=true,
-columns=[l]{fullflexible},
+language=Python,
+basicstyle=\small\sffamily,
 numbers=left,
-xrightmargin=0zw,
-xleftmargin=3zw,
-numberstyle={\scriptsize},
-stepnumber=1,
-numbersep=1zw,
-lineskip=-0.5ex
+numberstyle=\tiny\color{gray},
+keywordstyle=\color{blue},
+commentstyle=\color{dkgreen},
+stringstyle=\color{mauve},
+frame=single,
+columns=fullflexible,
+showspaces=false,
+showstringspaces=false,
+tabsize=3
 }
 \renewcommand{\lstlistingname}{}
 
