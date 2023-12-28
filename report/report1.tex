@@ -335,8 +335,32 @@ tkinterのScaleを用いて、スライダーのUIを表示している。
 \end{figure}
 
 \subsection{音声の再生・停止}
+ファイルを選択すると、図\ref{fig:play_stop_button}のような再生・停止ボタンが表示される。
+再生ボタンを押すと音声が再生され、停止ボタンを押すと音声が停止することを確認した。
+また、再生中に再度再生ボタンを押すと、一旦再生を停止してから再度再生をすることを確認した。
+
+\begin{figure}[h]
+\centering
+\includegraphics[keepaspectratio, width=13cm]
+{./images/play_stop_buttons.jpg}
+\caption{再生・停止ボタン}
+\label{fig:play_stop_button}
+\end{figure}
 
 \subsection{表示区間・再生区間の限定}
+ファイルを選択すると、図\ref{fig:sliders}のようなスライダーが表示される。
+スライダーを動かすと、図\ref{fig:filtered_figures}のように
+表示区間・再生区間が限定されることを確認した。
+また、開始を表すスライダーの値が終了を表すスライダーの値より大きくならないように
+なっていることを確認した。
+
+\begin{figure}[h]
+\centering
+\includegraphics[keepaspectratio, width=13cm]
+{./images/filtered_figures.jpg}
+\caption{区間を限定した図}
+\label{fig:filtered_figures}
+\end{figure}
 
 \section{工夫点}
 \subsection{ファイル選択機能}
