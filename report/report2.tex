@@ -47,7 +47,7 @@ tabsize=3
 
 \begin{document}
 
-\title{計算機科学実験4 音声 レポート1}
+\title{計算機科学実験4 音声 レポート2}
 \author{
   京都大学工学部情報学科\\
   計算機科学コース3回生\\
@@ -60,12 +60,12 @@ tabsize=3
 \tableofcontents
 \newpage
 
+
 \section{機能・プログラム説明}
 
-課題1では音声の基本的な情報を表示するプログラムを作成した。
+課題2では音響信号を操作するグラフィカルユーザーインタフェースを作成した。
 この章では作成した具体的な機能について説明する。
-画面全体は図\ref{fig:work2_app}のようになっている。下のVoice ChangeやTremoloの部分は
-課題2の機能のため、このレポートでは説明しない。
+画面全体は図\ref{fig:work2_app}のようになっている。
 
 \begin{figure}[h]
 \centering
@@ -77,7 +77,7 @@ tabsize=3
 
 \subsection{ファイル選択}
 ファイル選択機能を実装した。ファイル選択ボタン(図\ref{fig:select_file})を押すと、ファイル選択ダイアログが表示される。
-選択したファイルを読み取り、表示対象の音声データとして扱う。
+選択したファイルを読み取り、操作対象の音声データとして扱う。
 
 \begin{figure}[h]
 \centering
@@ -102,8 +102,71 @@ def load_waveform(filename):
   return x
 \end{lstlisting}
 
+\subsection{ビブラート}
+選択したファイルの音声にビブラートをかける機能を実装した。
+コード\ref{code:vibrato}はビブラートをかけるプログラムである。
+generate\_sinusoid関数は、サンプリング周波数S、周波数F、長さTを引数に取り、
+サンプリング周波数Sで周波数Fの正弦波を長さT秒分生成する関数である。
+引数に、元の波形、サンプリング周波数S、ビブラートの周波数F、ビブラートの深さD、
+ビブラートの遅れ時間$\tau$を取り、次の式に従って波形を変形させた。
+
+\begin{equation}
+  \left\{
+  \begin{aligned}
+    x'_t &= x_{t-\tau(t)} \\
+    \tau(t) &= \tau 0 + D \sin(2 \pi F t)
+  \end{aligned}
+  \right.
+\end{equation}
+
+\begin{lstlisting}[caption=ビブラート,label=code:vibrato]
+def vibrato(waveform, sampling_rate: int, frequency: float, depth: float, tau: float):
+  vibrato_waveform = generate_sinusoid(sampling_rate, frequency, len(waveform) / sampling_rate)
+  changed = waveform.copy()
+  for i in range(len(waveform)):
+    taui = int(tau + depth * vibrato_waveform[i])
+    if taui < 0:
+      taui = 0
+    elif taui >= len(waveform):
+      taui = len(waveform) - 1
+    changed[i] = waveform[i - taui]
+  return changed
+\end{lstlisting}
+
+\subsection{ボイスチェンジ}
+選択されたファイルの音声にボイスチェンジをかける機能を実装した。
+コード\ref{code:voice_change}はボイスチェンジをかけるプログラムである。
+sin波を生成して、元の波に乗算することで、ボイスチェンジを実現した。
+
+\begin{lstlisting}[caption=ボイスチェンジ,label=code:voice_change]
+def voice_change(waveform, sampling_rate, frequency):
+  duration = len(waveform)
+  sin_wave = generate_sinusoid(sampling_rate, frequency, duration / sampling_rate)
+  sin_wave = sin_wave * 0.9
+  return waveform * sin_wave
+\end{lstlisting}
+
+\subsection{トレモロ}
+選択したファイルの音声にトレモロをかける機能を実装した。
+コード\ref{code:tremolo}はトレモロをかけるプログラムである。
+次の式で得られる信号を入力音声に乗算することで、トレモロを実現した。
+
+\begin{equation}
+  a(t) = 1 + D \sin(2 \pi F t)
+\end{equation}
+
+
+\begin{lstlisting}[caption=トレモロ,label=code:tremolo]
+def tremolo(waveform, sampling_rate, frequency, depth):
+  tremolo_waveform = generate_sinusoid(sampling_rate, frequency, len(waveform) / sampling_rate)
+  changed = waveform * (1.0 + depth * tremolo_waveform)
+  return changed / np.max(np.abs(changed))
+\end{lstlisting}
+
 \subsection{スペクトログラムの表示}
-選択したファイルの音声のスペクトログラムを表示する機能を実装した。
+加工後の音声のスペクトログラムを表示する機能を実装した。
+ビブラート、ボイスチェンジ、トレモロの各加工を行うと図が自動で更新され、
+加工後の音声のスペクトログラムが表示される。
 コード\ref{code:calc_spectrogram}はスペクトログラムを計算するプログラムである。
 numpyのhamming関数を用いて窓掛けを行い、FFTを行う。
 その後、対数振幅スペクトルを計算し、配列に保存する。
@@ -141,7 +204,9 @@ self.__ax.set_ylim(0, 3000)
 \end{lstlisting}
 
 \subsection{基本周波数の表示}
-選択したファイルの音声の基本周波数を表示する機能を実装した。
+加工後の音声の基本周波数を表示する機能を実装した。
+ビブラート、ボイスチェンジ、トレモロの各加工を行うと図が自動で更新され、
+加工後の音声の基本周波数が表示される。
 コード\ref{code:calc_f0}は基本周波数を計算するプログラムである。
 まず、numpyのcorrelate関数を用いて自己相関係数を計算する。
 その後、ピークを検出し、ピークのインデックスを取得する。
@@ -176,7 +241,9 @@ matplotlibのplot関数を用いて基本周波数を表示する。
 \end{lstlisting}
 
 \subsection{音程の表示}
-選択したファイルの音声の音程を表示する機能を実装した。
+加工後の音声の音程を表示する機能を実装した。
+ビブラート、ボイスチェンジ、トレモロの各加工を行うと図が自動で更新され、
+加工後の音声の音程が表示される。
 コード\ref{code:calc_pitch}は音程を計算するプログラムである。
 nn2hz関数はMIDIノートナンバーを周波数に変換する関数である。
 shs関数はスペクトルを用いて音程を計算する関数である。
@@ -216,7 +283,7 @@ yticksでy軸のラベルを設定している。ラベルの内容はC3からB4
 
 \subsection{音声の再生・停止}
 
-選択したファイルの音声を再生・停止する機能を実装した。
+加工後の音声を再生・停止する機能を実装した。
 コード\ref{code:play}は音声を再生するプログラムである。
 既に音声が再生中の場合は、一旦再生を停止してから再度再生をすることで、
 同じ音声を連続して再生することができる。
@@ -240,7 +307,8 @@ yticksでy軸のラベルを設定している。ラベルの内容はC3からB4
 
 \subsection{表示区間・再生区間の限定}
 
-スペクトログラムや音程の表示、及び音声の再生区間を限定する機能を実装した。
+加工対象の音声の区間を限定する機能を実装した。
+選択した区間に対してのみ、ビブラート、ボイスチェンジ、トレモロの各加工が行われる。
 コード\ref{code:limit}は表示区間・再生区間を限定するプログラムである。
 startの値はendの値より大きくならないようバリデーションを行った。
 
@@ -293,6 +361,45 @@ tkinterのScaleを用いて、スライダーのUIを表示している。
 {./images/file_select_dialog.png}
 \caption{ファイル選択ダイアログ}
 \label{fig:file_select_dialog}
+\end{figure}
+
+\subsection{ビブラート}
+ファイルを選択すると、図\ref{fig:vibrato}のようにビブラートの周波数と深さと定数値
+を指定するUIが表示される。
+frequency, depth, tauの値を入力してApplyボタンを押すと、音声にビブラートがかかることを確認した。
+
+\begin{figure}[h]
+\centering
+\includegraphics[keepaspectratio, width=13cm]
+{./images/vibrato.jpg}
+\caption{ビブラートの操作パネル}
+\label{fig:vibrato}
+\end{figure}
+
+\subsection{ボイスチェンジ}
+ファイルを選択すると、図\ref{fig:voice_change}のように
+ボイスチェンジの周波数を指定するUIが表示される。
+frequencyの値を入力してApplyボタンを押すと、音声にボイスチェンジがかかることを確認した。
+
+\begin{figure}[h]
+\centering
+\includegraphics[keepaspectratio, width=13cm]
+{./images/voice_change.jpg}
+\caption{ボイスチェンジの操作パネル}
+\label{fig:voice_change}
+\end{figure}
+
+\subsection{トレモロ}
+ファイルを選択すると、図\ref{fig:tremolo}のように
+トレモロの周波数と深さを指定するUIが表示される。
+frequency, depthの値を入力してApplyボタンを押すと、音声にトレモロがかかることを確認した。
+
+\begin{figure}[h]
+\centering
+\includegraphics[keepaspectratio, width=13cm]
+{./images/tremolo.jpg}
+\caption{トレモロの操作パネル}
+\label{fig:tremolo}
 \end{figure}
 
 \subsection{スペクトログラムの表示}
@@ -399,5 +506,6 @@ coreは音声の分析を行う部分、viewはGUIの表示を行う部分、con
 \section{参考文献}
 計算機科学実験及演習4 音響信号処理\newline
 http://www.sap.ist.i.kyoto-u.ac.jp/members/inoue/le4-audio/
+
 
 \end{document}
