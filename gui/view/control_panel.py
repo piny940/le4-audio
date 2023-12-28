@@ -42,4 +42,4 @@ class ControlPanel(ViewBase):
     self.voice_change.draw()
     self.tremolo.draw()
     self.vibrato.draw()
-    self._set([vc_frame, tremolo_frame])
+    self._set([vc_frame, tremolo_frame, vibrato_frame])
