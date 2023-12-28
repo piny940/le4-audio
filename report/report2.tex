@@ -405,13 +405,14 @@ frequency, depthの値を入力してApplyボタンを押すと、音声にト�
 \subsection{スペクトログラムの表示}
 
 ファイルを選択すると、図\ref{fig:spectrogram}のようにスペクトログラムが表示される。
-図\ref{fig:spectrogram}は「あいうえお」の音声のスペクトログラムである。
+また、音声に加工処理を施すと、スペクトログラムが自動で更新される。
+図\ref{fig:spectrogram}は「あいうえお」の音声にトレモロをかけた後のスペクトログラムである。
 これにより、スペクトログラムが正しく表示されていることが確認できる。
 
 \begin{figure}[h]
 \centering
 \includegraphics[keepaspectratio, width=13cm]
-{./images/spectrogram.png}
+{./images/spec-tremolo.jpg}
 \caption{スペクトログラム}
 \label{fig:spectrogram}
 \end{figure}
@@ -419,13 +420,13 @@ frequency, depthの値を入力してApplyボタンを押すと、音声にト�
 \subsection{基本周波数の表示}
 
 ファイルを選択すると、図\ref{fig:f0}のように基本周波数が表示される。
-図\ref{fig:f0}は「あいうえお」の音声の基本周波数である。
+図\ref{fig:f0}は「あいうえお」の音声にトレモロをかけた後の基本周波数である。
 これにより、基本周波数が正しく表示されていることが確認できる。
 
 \begin{figure}[h]
 \centering
 \includegraphics[keepaspectratio, width=13cm]
-{./images/spectrogram.png}
+{./images/spec-tremolo.jpg}
 \caption{基本周波数}
 \label{fig:f0}
 \end{figure}
@@ -435,13 +436,13 @@ frequency, depthの値を入力してApplyボタンを押すと、音声にト�
 図\ref{fig:pitch}は
 \href[]{http://www.sap.ist.i.kyoto-u.ac.jp/members/inoue/le4-audio/}
   {計算機科学実験及演習4 音響信号処理}
-のSHS確認用サンプル音声の音程である。
+のSHS確認用サンプル音声にトレモロをかけた後の音程である。
 これにより、音程が正しく表示されていることが確認できる。
 
 \begin{figure}[h]
 \centering
 \includegraphics[keepaspectratio, width=13cm]
-{./images/melody.jpg}
+{./images/melody-tremolo.jpg}
 \caption{音程}
 \label{fig:pitch}
 \end{figure}
@@ -449,6 +450,7 @@ frequency, depthの値を入力してApplyボタンを押すと、音声にト�
 \subsection{音声の再生・停止}
 ファイルを選択すると、図\ref{fig:play_stop_button}のような再生・停止ボタンが表示される。
 再生ボタンを押すと音声が再生され、停止ボタンを押すと音声が停止することを確認した。
+音声を加工した後に再生ボタンを押すと、加工後の音声が再生される。
 また、再生中に再度再生ボタンを押すと、一旦再生を停止してから再度再生をすることを確認した。
 
 \begin{figure}[h]
@@ -461,8 +463,7 @@ frequency, depthの値を入力してApplyボタンを押すと、音声にト�
 
 \subsection{表示区間・再生区間の限定}
 ファイルを選択すると、図\ref{fig:sliders}のようなスライダーが表示される。
-スライダーを動かすと、図\ref{fig:filtered_figures}のように
-表示区間・再生区間が限定されることを確認した。
+スライダーで区間を限定すると、加工対象の音声の区間が限定されることを確認した。
 また、開始を表すスライダーの値が終了を表すスライダーの値より大きくならないように
 なっていることを確認した。
 
@@ -480,14 +481,15 @@ frequency, depthの値を入力してApplyボタンを押すと、音声にト�
 用いて選択するようにした。これにより、分析対象の音声を簡単に変更できるようになった。
 
 \subsection{区間選択機能}
-startの値がendの値より大きくならないようバリデーションを行った。
+加工対象の音声の区間を限定できるように工夫を行なった。
+また、startの値がendの値より大きくならないようバリデーションを行った。
 
 \subsection{音程の表示}
 音程の図を表示する際に、y軸にはC3からB4までの音程を表示するようにした。
 これにより、ノート番号を表示する場合と比べて、表示される音程がわかりやすくなった。
 
 \subsection{音声の再生・停止機能}
-音声の再生・停止ボタンを実装した。これにより、UI上で表示されている音声を
+音声の再生・停止ボタンを実装した。これにより、加工後の音声をUI上で
 実際に確認することが可能になった。
 
 \subsection{コード設計の工夫}
@@ -496,10 +498,10 @@ coreは音声の分析を行う部分、viewはGUIの表示を行う部分、con
 橋渡しを行う部分である。このように分割することで、コードの可読性・保守性を向上させた。
 
 \section{考察}
-今回は、音声の基本的な情報を表示するプログラムを作成した。
+今回は、音声信号を操作するGUIアプリを作成した。
 コードをMVCアーキテクチャに従って整理をすることで、コードの見通しをよくすることができた。
-また、matplotlibを使って図を複数表示する方法など、python関係の知識を身につけることができた。
-次の課題では音声の変換を行うプログラムを作成する予定である。
+また、音声を加工した時に図が自動的に更新されるといった複雑なUIを作成する勉強になった。
+次の課題では音声の分析をリアルタイムで行うGUIシステムを作成する予定である。
 
 % \printbibliography[title=参考文献]
 
