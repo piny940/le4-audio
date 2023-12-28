@@ -305,14 +305,14 @@ yticksでy軸のラベルを設定している。ラベルの内容はC3からB4
 
 \end{lstlisting}
 
-\subsection{表示区間・再生区間の限定}
+\subsection{音声加工区間の限定}
 
 加工対象の音声の区間を限定する機能を実装した。
 選択した区間に対してのみ、ビブラート、ボイスチェンジ、トレモロの各加工が行われる。
-コード\ref{code:limit}は表示区間・再生区間を限定するプログラムである。
+コード\ref{code:limit}は音声加工区間を限定するプログラムである。
 startの値はendの値より大きくならないようバリデーションを行った。
 
-\begin{lstlisting}[caption=表示区間・再生区間の限定,label=code:limit]
+\begin{lstlisting}[caption=音声加工区間の限定,label=code:limit]
   def set_start(self, start: int):
     if start >= self.__end - self.MIN_SIZE:
       return
@@ -461,7 +461,7 @@ frequency, depthの値を入力してApplyボタンを押すと、音声にト�
 \label{fig:play_stop_button}
 \end{figure}
 
-\subsection{表示区間・再生区間の限定}
+\subsection{音声加工区間の限定}
 ファイルを選択すると、図\ref{fig:sliders}のようなスライダーが表示される。
 スライダーで区間を限定すると、加工対象の音声の区間が限定されることを確認した。
 また、開始を表すスライダーの値が終了を表すスライダーの値より大きくならないように
