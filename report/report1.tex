@@ -60,7 +60,7 @@ tabsize=3
 課題1では音声の基本的な情報を表示するプログラムを作成した。
 この章では作成した具体的な機能について説明する。
 画面全体は図\ref{fig:work2_app}のようになっている。下のVoice ChangeやTremoloの部分は
-課題2の機能のため、レポートでは説明しない。
+課題2の機能のため、このレポートでは説明しない。
 
 \begin{figure}[h]
 \centering
@@ -83,8 +83,8 @@ tabsize=3
 \end{figure}
 
 ファイル読み取りのプログラムはコード\ref{code:load_file1}, \ref{code:load_file2}の通りである。
-コード\ref{code:load_file1}はtkinterのfiledialogを用いてファイル選択ダイアログを表示し、
-選択したファイル名を取得する。コード\ref{code:load_file2}はlibrosaを用いて音声データを読み取る。
+コード\ref{code:load_file1}ではtkinterのfiledialogを用いてファイル選択ダイアログを表示し、
+選択したファイル名を取得する。コード\ref{code:load_file2}ではlibrosaを用いて音声データを読み取る。
 
 \begin{lstlisting}[caption=ファイル読み取り1,label=code:load_file1]
   filename = tk.filedialog.askopenfilename()
@@ -390,5 +390,9 @@ coreは音声の分析を行う部分、viewはGUIの表示を行う部分、con
 次の課題では音声の変換を行うプログラムを作成する予定である。
 
 % \printbibliography[title=参考文献]
+
+\section{参考文献}
+計算機科学実験及演習4 音響信号処理\newline
+http://www.sap.ist.i.kyoto-u.ac.jp/members/inoue/le4-audio/
 
 \end{document}
