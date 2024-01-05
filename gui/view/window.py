@@ -9,6 +9,7 @@ from .control_panel import ControlPanel
 from .play_button import PlayButton
 from .stop_button import StopButton
 from .reset_button import ResetButton
+from .real_time_switch import RealTimeSwitch
 
 class Window:
   def __init__(self, c: IController):
@@ -29,6 +30,12 @@ class Window:
     title_frame.pack(side=tk.TOP)
     self.title = Title(title_frame, self.__c)
     self.title.draw()
+
+    # ---- Real Time Switch ----
+    real_time_frame = tk.Frame(self.__window, width=1000, height=100)
+    real_time_frame.pack(side=tk.TOP)
+    self.real_time = RealTimeSwitch(real_time_frame, self.__c)
+    self.real_time.draw(True)
 
     # ----Figures ----
     spec_frame = tk.Frame(self.__window, width=800, height=400)
