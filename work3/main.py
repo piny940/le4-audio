@@ -1,64 +1,17 @@
-#
-# 計算機科学実験及演習 4「音響信号処理」
-# サンプルソースコード
-#
-# 簡易カラオケシステム
-#
-# mp3ファイルを別スレッドで再生しつつ
-# マイクからの音声入力に対してスペクトログラムとパワーを計算して表示する
-# 上記をリアルタイムで逐次処理を行う
-#
-
-# ライブラリの読み込み
 import pyaudio
 import numpy as np
 import threading
 import time
-
-# matplotlib関連
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
-
-# GUI関連
 import tkinter
 from matplotlib.backends.backend_tkagg import (
 	FigureCanvasTkAgg, NavigationToolbar2Tk)
-
-# mp3ファイルを読み込んで再生
 from pydub import AudioSegment
 from pydub.utils import make_chunks
+from constants import *
 
-# サンプリングレート
-SAMPLING_RATE = 16000
-
-# フレームサイズ
-FRAME_SIZE = 2048
-
-# サイズシフト
-SHIFT_SIZE = int(SAMPLING_RATE / 20)	# 今回は0.05秒
-
-# スペクトルをカラー表示する際に色の範囲を正規化するために
-# スペクトルの最小値と最大値を指定
-# スペクトルの値がこの範囲を超えると，同じ色になってしまう
-SPECTRUM_MIN = -5
-SPECTRUM_MAX = 1
-
-# 音量を表示する際の値の範囲
-VOLUME_MIN = -120
-VOLUME_MAX = -10
-
-# log10を計算する際に，引数が0にならないようにするためにこの値を足す
-EPSILON = 1e-10
-
-# ハミング窓
-hamming_window = np.hamming(FRAME_SIZE)
-
-# グラフに表示する縦軸方向のデータ数
-MAX_NUM_SPECTROGRAM = int(FRAME_SIZE / 2)
-
-# グラフに表示する横軸方向のデータ数
-NUM_DATA_SHOWN = 100
 
 # GUIの開始フラグ（まだGUIを開始していないので、ここではFalseに）
 is_gui_running = False
@@ -234,7 +187,7 @@ stream = p.open(
 
 # mp3ファイル名
 # ここは各自の音源ファイルに合わせて変更すること
-filename = 'audio/shs-test-man.mp3'
+filename = '../audio/shs-test-man.mp3'
 
 #
 # 【注意】なるべく1チャネルの音声を利用すること
