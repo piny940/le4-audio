@@ -114,10 +114,10 @@ ax2 = ax1.twinx()
 
 # 音量をプロットする
 # 戻り値はデータの更新 & 再描画のために必要
-ax2_sub, = ax2.plot(time_x_data, volume_data, c='y')
+ax2_sub, = ax2.plot(time_x_data, volume_data)
 
 # 音程をプロットする
-ax3_sub, = ax3.plot(time_x_data, melody_data, c='y')
+ax3_sub, = ax3.plot(time_x_data, melody_data)
 
 # ラベルの設定
 ax1.set_xlabel('sec')				# x軸のラベルを設定
@@ -190,10 +190,14 @@ def input_callback(in_data, frame_count, time_info, status_flags):
 
 	# フレームサイズ分のデータがあれば処理を行う
 	if len(x_stacked_data) >= FRAME_SIZE:
-		
 		# フレームサイズからはみ出した過去のデータは捨てる
 		x_stacked_data = x_stacked_data[len(x_stacked_data)-FRAME_SIZE:]
 
+		# 音量も同様の処理
+		vol = 20 * np.log10(np.mean(x_current_frame ** 2) + EPSILON)
+		volume_data = np.roll(volume_data, -1)
+		volume_data[-1] = vol
+		
 		# スペクトルを計算
 		fft_spec = np.fft.rfft(x_stacked_data * hamming_window)
 		fft_log_abs_spec = np.log10(np.abs(fft_spec) + EPSILON)[:-1]
@@ -202,11 +206,8 @@ def input_callback(in_data, frame_count, time_info, status_flags):
 		# 最後の列（＝最後の時刻のスペクトルがあった位置）に最新のスペクトルデータを挿入
 		spectrogram_data = np.roll(spectrogram_data, -1, axis=1)
 		spectrogram_data[:, -1] = fft_log_abs_spec
-
-		# 音量も同様の処理
-		vol = 20 * np.log10(np.mean(x_current_frame ** 2) + EPSILON)
-		volume_data = np.roll(volume_data, -1)
-		volume_data[-1] = vol
+		if vol < VOLUME_THRESHOLD:
+			spectrogram_data[:, -1] = np.array(fft_log_abs_spec) * np.nan
 
 		# 音程
 		melody = shs(fft_log_abs_spec, SAMPLING_RATE, FRAME_SIZE)
