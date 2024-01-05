@@ -209,6 +209,8 @@ def input_callback(in_data, frame_count, time_info, status_flags):
 		# 音程
 		melody = shs(fft_log_abs_spec, SAMPLING_RATE, FRAME_SIZE)
 		melody_data = np.roll(melody_data, -1)
+		if vol < VOLUME_THRESHOLD:
+			melody = np.nan # 話していないときは音程を0にする
 		melody_data[-1] = melody - NOTES[0]
 	
 	# 戻り値は pyaudio の仕様に従うこと
