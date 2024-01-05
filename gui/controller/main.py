@@ -16,9 +16,9 @@ class Controller(IController):
     self.__audio_player = AudioPlayer()
     self.__original = None
 
-  def main(self):
+  async def main(self):
     plt.rcParams.update({'font.size': 6})
-    self.__view.create_window()
+    await self.__view.create_window()
     self.__waveform = None
     self.__wave_range = None
 
