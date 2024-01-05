@@ -51,7 +51,7 @@ class Melody:
     self.__ax.set_ylabel('melody')
 
   def draw(self, melody, wave_range: WaveRange):
-    plt.plot(list(map(lambda x: x - NOTES[0], melody)))
+    self.__ax.plot(list(map(lambda x: x - NOTES[0], melody)))
     plt.yticks(np.arange(24),
            #  list(["A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4",
            #        "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5",
