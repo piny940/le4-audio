@@ -19,9 +19,12 @@ class Controller(IController):
     self.real_time = DEFAULT_REAL_TIME_ON
 
   async def main(self):
-    plt.rcParams.update({'font.size': 6})
+    plt.rcParams.update({'font.size': 10})
     loop = asyncio.get_event_loop()
-    loop.create_task(self.__window.create_window())
+    loop.create_task(self.create_window_task())
+  
+  async def create_window_task(self):
+    await self.__window.create_window()
 
   def load_file(self, filename):
     self.__waveform = load_waveform(filename)
