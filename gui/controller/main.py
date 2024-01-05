@@ -1,3 +1,4 @@
+import asyncio
 from view.window import Window
 from .interface import IController
 from core.core import *
@@ -19,7 +20,8 @@ class Controller(IController):
 
   async def main(self):
     plt.rcParams.update({'font.size': 6})
-    self.__window.create_window()
+    loop = asyncio.get_event_loop()
+    loop.create_task(self.__window.create_window())
 
   def load_file(self, filename):
     self.__waveform = load_waveform(filename)

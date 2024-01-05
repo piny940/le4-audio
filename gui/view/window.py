@@ -22,7 +22,7 @@ class Window:
 
     self.__c = c
 
-  def create_window(self):
+  async def create_window(self):
     # ----- Window & Canvas config -----
     self.__window = tk.Tk()
     self.__window.title("Audio")
@@ -46,4 +46,4 @@ class Window:
     self.main_panel = MainPanel(main_panel_frame, self.__c)
     self.main_panel.draw(DEFAULT_REAL_TIME_ON)
 
-    self.__window.mainloop()
+    await self.__window.mainloop()
