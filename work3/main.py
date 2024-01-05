@@ -11,7 +11,23 @@ from matplotlib.backends.backend_tkagg import (
 from pydub import AudioSegment
 from pydub.utils import make_chunks
 from constants import *
+import math
 
+def hz2nn(frequency):
+  return int(round(12.0 * math.log(frequency / 440.0, 2) + 69))
+
+def nn2hz(nn):
+  return 440.0 * 2 ** ((nn - 69) / 12.0)
+
+def shs(spectrum, sample_rate, size_frame):
+  likelihood = np.zeros(len(NOTES))
+  for i in range(len(likelihood)):
+    base_freq = nn2hz(NOTES[i])
+    for j in range(1, 16):
+      freq = base_freq * j
+      fft_idx = int(freq * size_frame / sample_rate)
+      likelihood[i] += 0.8**j * np.exp(spectrum[fft_idx])
+  return NOTES[np.argmax(likelihood)]
 
 # GUIの開始フラグ（まだGUIを開始していないので、ここではFalseに）
 is_gui_running = False

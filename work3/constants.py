@@ -30,3 +30,5 @@ MAX_NUM_SPECTROGRAM = int(FRAME_SIZE / 2)
 
 # グラフに表示する横軸方向のデータ数
 NUM_DATA_SHOWN = 100
+
+NOTES = range(36, 60)
