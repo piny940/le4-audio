@@ -35,6 +35,7 @@ class Figures:
       save_count=50
     )
     self.__fig.tight_layout()
+    self.__fig.canvas.flush_events()
     self.__fig.canvas.draw()
   
   def animate(self, frame_index):

@@ -151,6 +151,7 @@ ani = animation.FuncAnimation(
 
 # matplotlib を GUI(Tkinter) に追加する
 toolbar = NavigationToolbar2Tk(canvas, root)
+canvas.flush_events()
 canvas.get_tk_widget().pack()
 
 # 再生位置をテキストで表示するためのラベルを作成
