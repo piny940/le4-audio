@@ -11,6 +11,7 @@ from .stop_button import StopButton
 from .reset_button import ResetButton
 from .real_time_switch import RealTimeSwitch
 from .batch_panel import BatchPanel
+from .main_panel import MainPanel
 
 class Window:
   def __init__(self, c: IController):
@@ -38,7 +39,7 @@ class Window:
     self.real_time = RealTimeSwitch(real_time_frame, self.__c)
     self.real_time.draw(True)
 
-    self.batch_panel = BatchPanel(self.__window, self.__c)
-    self.batch_panel.draw()
+    self.main_panel = MainPanel(self.__window, self.__c)
+    self.main_panel.draw(True)
 
     self.__window.mainloop()

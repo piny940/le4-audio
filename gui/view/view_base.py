@@ -10,7 +10,8 @@ class ViewBase():
 
   def _set(self, widgets: Union['list[tk.Widget]', 'list[ViewBase]']):
     for widget in self._widgets:
-      widget.destroy()
+      if widget is not None:
+        widget.destroy()
     self._widgets = widgets
 
   def destroy(self):
