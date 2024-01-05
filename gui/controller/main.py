@@ -17,7 +17,7 @@ class Controller(IController):
     self.__original = None
     self.real_time = DEFAULT_REAL_TIME_ON
 
-  def main(self):
+  async def main(self):
     plt.rcParams.update({'font.size': 6})
     self.__window.create_window()
 
