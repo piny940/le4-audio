@@ -15,6 +15,8 @@ from pydub.utils import make_chunks
 from constants import *
 import math
 
+plt.rcParams.update({'font.size': 6})
+
 def hz2nn(frequency):
   return int(round(12.0 * math.log(frequency / 440.0, 2) + 69))
 
@@ -65,6 +67,8 @@ root.wm_title("EXP4-AUDIO-SAMPLE")
 # スペクトログラムを描画
 t = plt.subplots(1, 2)
 fig: Figure = t[0]
+fig.set_figwidth(7)
+fig.set_figheight(3)
 ax1: Axes = t[1][0]
 ax3: Axes = t[1][1]
 canvas = FigureCanvasTkAgg(fig, master=root)
@@ -141,6 +145,7 @@ ani = animation.FuncAnimation(
 
 # matplotlib を GUI(Tkinter) に追加する
 toolbar = NavigationToolbar2Tk(canvas, root)
+fig.tight_layout()
 canvas.flush_events()
 canvas.get_tk_widget().pack()
 
