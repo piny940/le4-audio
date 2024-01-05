@@ -5,6 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 from core.constants import SR, SHIFT_SIZE, NOTES
 from core.wave_range import WaveRange
+import matplotlib.animation as animation
 
 class Figures:
   def __init__(self, frame: tk.Frame):
@@ -12,6 +13,8 @@ class Figures:
     self.__fig = plt.figure(figsize=(10, 4))
     self.__spec_ax = None
     self.__melody_ax = None
+    self.__spec_fig: SpecWithF0s = None
+    self.__melody_fig = None
     canvas = FigureCanvasTkAgg(self.__fig, master=self.__frame)
     canvas.get_tk_widget().pack(side='left')
 
@@ -19,30 +22,47 @@ class Figures:
     for ax in self.__fig.axes:
       self.__fig.delaxes(ax)
     self.__spec_ax = self.__fig.add_subplot(121)
-    SpecWithF0s(self.__spec_ax).draw(spectrogram, f0s, wave_range)
+    self.__spec_fig = SpecWithF0s(self.__spec_ax).draw(spectrogram, f0s, wave_range)
     self.__melody_ax = self.__fig.add_subplot(122)
-    Melody(self.__melody_ax).draw(melody, wave_range)
+    self.__melody_fig = Melody(self.__melody_ax).draw(melody, wave_range)
+    animation.FuncAnimation(
+      self.__fig,
+      self.animate,
+      interval=1000,
+      blit=True
+    )
     self.__fig.tight_layout()
     self.__fig.canvas.draw()
-
+  
+  def animate(self):
+    self.__spec_fig.animate()
 
 class SpecWithF0s:
   def __init__(self, ax: Axes):
     self.__ax = ax
     self.__ax.set_xlabel('sample')
     self.__ax.set_ylabel('frequency [Hz]')
+    self.__spec_im = None
+    self.__spec = None
+    self.__f0s = None
 
   def draw(self, spectrogram, f0s, wave_range: WaveRange):
-    self.__ax.imshow(
+    self.__spec = spectrogram
+    self.__f0s = f0s
+    self.__spec_im = self.__ax.imshow(
         np.flipud(np.array(spectrogram).T),
         extent=[0, len(spectrogram), 0, SR / 2],
         aspect='auto',
         interpolation='nearest',
     )
     x_data = np.linspace(0, len(spectrogram), len(f0s))
-    self.__ax.plot(x_data, f0s)
+    self.__f0s_im, = self.__ax.plot(x_data, f0s)
     self.__ax.set_xlim(wave_range.get_start() // SHIFT_SIZE, min(wave_range.get_end() // SHIFT_SIZE, len(spectrogram)))
     self.__ax.set_ylim(0, 3000)
+  
+  def animate(self):
+    self.__spec_im.set_array(np.flipud(np.array(self.__spec).T))
+    self.__f0s_im.set_data(self.__f0s)
 
 class Melody:
   def __init__(self, ax: Axes):
