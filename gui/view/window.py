@@ -10,6 +10,7 @@ from .play_button import PlayButton
 from .stop_button import StopButton
 from .reset_button import ResetButton
 from .real_time_switch import RealTimeSwitch
+from .batch_panel import BatchPanel
 
 class Window:
   def __init__(self, c: IController):
@@ -37,41 +38,7 @@ class Window:
     self.real_time = RealTimeSwitch(real_time_frame, self.__c)
     self.real_time.draw(True)
 
-    # ----Figures ----
-    spec_frame = tk.Frame(self.__window, width=800, height=400)
-    spec_frame.pack(side=tk.TOP)
-    self.figures = Figures(spec_frame)
-
-    # ---- File Select ----
-    middle_buttons_frame = tk.Frame(self.__window, width=1000, height=100)
-    middle_buttons_frame.pack(side=tk.TOP)
-    self.file_select = FileSelect(middle_buttons_frame, self.__c)
-    self.file_select.draw()
-    # ---- Play Button ----
-    self.play_button = PlayButton(middle_buttons_frame, self.__c)
-    self.stop_button = StopButton(middle_buttons_frame, self.__c)
-    # ---- Reset Button ----
-    self.reset_button = ResetButton(middle_buttons_frame, self.__c)
-
-    # ---- Start Slider ----
-    start_slider_frame = tk.Frame(self.__window, width=1000, height=50)
-    start_slider_frame.pack(side=tk.TOP)
-    self.start_slider = StartSlider(start_slider_frame, self.__c)
-
-    # ---- End Slider ----
-    end_slider_frame = tk.Frame(self.__window, width=1000, height=50)
-    end_slider_frame.pack(side=tk.TOP)
-    self.end_slider = EndSlider(end_slider_frame, self.__c)
-
-    # ---- Control Panel ----
-    control_panel_frame = tk.Frame(
-      self.__window,
-      width=self.__WindowWidth,
-      height=380,
-      padx=10,
-      pady=10
-    )
-    control_panel_frame.pack(side=tk.TOP)
-    self.control_panel = ControlPanel(control_panel_frame, self.__c)
+    self.batch_panel = BatchPanel(self.__window, self.__c)
+    self.batch_panel.draw()
 
     self.__window.mainloop()

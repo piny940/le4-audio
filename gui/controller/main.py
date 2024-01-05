@@ -15,6 +15,7 @@ class Controller(IController):
     self.__melody = None
     self.__audio_player = AudioPlayer()
     self.__original = None
+    self.real_time = True
 
   def main(self):
     plt.rcParams.update({'font.size': 6})
@@ -28,12 +29,12 @@ class Controller(IController):
     self.__wave_range = WaveRange(self.__waveform)
     self.calc()
     self.update_figures(self.__wave_range)
-    self.__view.play_button.draw()
-    self.__view.stop_button.draw()
-    self.__view.reset_button.draw()
-    self.__view.start_slider.draw(self.__waveform, self.__wave_range.get_start())
-    self.__view.end_slider.draw(self.__waveform, self.__wave_range.get_end() -1)
-    self.__view.control_panel.draw()
+    self.__view.batch_panel.play_button.draw()
+    self.__view.batch_panel.stop_button.draw()
+    self.__view.batch_panel.reset_button.draw()
+    self.__view.batch_panel.start_slider.draw(self.__waveform, self.__wave_range.get_start())
+    self.__view.batch_panel.end_slider.draw(self.__waveform, self.__wave_range.get_end() -1)
+    self.__view.batch_panel.control_panel.draw()
 
   def calc(self):
     self.__spec = spectrogram(self.__waveform, SIZE_FRAME, SHIFT_SIZE)
@@ -41,17 +42,17 @@ class Controller(IController):
     self.__melody = get_melody(self.__spec)
 
   def update_figures(self, wave_range: WaveRange):
-    self.__view.figures.draw(self.__spec, self.__f0s, self.__melody, wave_range)
+    self.__view.batch_panel.figures.draw(self.__spec, self.__f0s, self.__melody, wave_range)
   
   def update_start(self, start: str):
     self.__wave_range.set_start(int(start))
     self.update_figures(self.__wave_range)
-    self.__view.start_slider.set_value(self.__wave_range.get_start())
+    self.__view.batch_panel.start_slider.set_value(self.__wave_range.get_start())
   
   def update_end(self, end: str):
     self.__wave_range.set_end(int(end))
     self.update_figures(self.__wave_range)
-    self.__view.end_slider.set_value(self.__wave_range.get_end() - 1)
+    self.__view.batch_panel.end_slider.set_value(self.__wave_range.get_end() - 1)
 
   def play(self):
     start = self.__wave_range.get_start()
@@ -63,7 +64,7 @@ class Controller(IController):
     self.__audio_player.stop()
   
   def apply_voice_change(self):
-    freq = self.__view.control_panel.voice_change.frequency_box.get_value()
+    freq = self.__view.batch_panel.control_panel.voice_change.frequency_box.get_value()
     try:
       freq = float(freq)
       if freq < 0:
@@ -80,8 +81,8 @@ class Controller(IController):
     self.update_figures(self.__wave_range)
   
   def apply_tremolo(self):
-    freq = self.__view.control_panel.tremolo.frequency_box.get_value()
-    depth = self.__view.control_panel.tremolo.depth_box.get_value()
+    freq = self.__view.batch_panel.control_panel.tremolo.frequency_box.get_value()
+    depth = self.__view.batch_panel.control_panel.tremolo.depth_box.get_value()
     try:
       freq = float(freq)
       depth = float(depth)
@@ -100,9 +101,9 @@ class Controller(IController):
     self.update_figures(self.__wave_range)
   
   def apply_vibrato(self):
-    freq = self.__view.control_panel.vibrato.frequency_box.get_value()
-    depth = self.__view.control_panel.vibrato.depth_box.get_value()
-    tau = self.__view.control_panel.vibrato.tau_box.get_value()
+    freq = self.__view.batch_panel.control_panel.vibrato.frequency_box.get_value()
+    depth = self.__view.batch_panel.control_panel.vibrato.depth_box.get_value()
+    tau = self.__view.batch_panel.control_panel.vibrato.tau_box.get_value()
 
     try:
       freq = float(freq)
@@ -126,3 +127,7 @@ class Controller(IController):
     self.__waveform = self.__original.copy()
     self.calc()
     self.update_figures(self.__wave_range)
+  
+  def update_real_time(self, is_on: bool):
+    self.real_time = is_on
+    self.__view.real_time.draw(is_on)
