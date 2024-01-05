@@ -16,7 +16,7 @@ class Figures:
     self.__spec_fig = None
     self.__melody_fig = None
     canvas = FigureCanvasTkAgg(self.__fig, master=self.__frame)
-    canvas.get_tk_widget().pack(side='left')
+    canvas.get_tk_widget().pack(side=tk.LEFT)
 
   def draw(self, spectrogram, f0s, melody, wave_range: WaveRange):
     for ax in self.__fig.axes:
@@ -31,7 +31,8 @@ class Figures:
       self.__fig,
       self.animate,
       interval=1000,
-      blit=True
+      blit=True,
+      save_count=50
     )
     self.__fig.tight_layout()
     self.__fig.canvas.draw()
@@ -50,10 +51,10 @@ class SpecWithF0s:
     self.__xdata = None
 
   def draw(self, spectrogram, f0s, wave_range: WaveRange):
-    self.__spec = spectrogram
+    self.__spec = np.flipud(np.array(spectrogram).T)
     self.__f0s = f0s
     self.__spec_im = self.__ax.imshow(
-        np.flipud(np.array(spectrogram).T),
+        self.__spec,
         extent=[0, len(spectrogram), 0, SR / 2],
         aspect='auto',
         interpolation='nearest',
@@ -64,9 +65,10 @@ class SpecWithF0s:
     self.__ax.set_ylim(0, 3000)
   
   def animate(self):
-    self.__spec_im.set_array(np.flipud(np.array(self.__spec).T))
+    self.__spec_im.set_array(self.__spec)
     self.__f0s_im.set_data(self.__xdata, self.__f0s)
-    return self.__spec_im, self.__f0s_im
+    return self.__f0s_im, self.__spec_im
+    # return self.__f0s_im
 
 class Melody:
   def __init__(self, ax: Axes):
