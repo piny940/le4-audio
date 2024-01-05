@@ -64,6 +64,8 @@ def animate(frame_index):
 root = tkinter.Tk()
 root.wm_title("EXP4-AUDIO-SAMPLE")
 
+time.sleep(3)
+
 # スペクトログラムを描画
 t = plt.subplots(1, 2)
 fig: Figure = t[0]
