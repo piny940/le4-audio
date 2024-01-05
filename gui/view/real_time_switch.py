@@ -6,6 +6,7 @@ class RealTimeSwitch(ViewBase):
     self.button = tk.Button(
       master=self._frame,
       text="On" if is_on else "Off",
+      command=self._c.toggle_real_time
     )
     self.button.pack(side=tk.LEFT)
     self._set([self.button])

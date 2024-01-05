@@ -45,3 +45,7 @@ class IController(metaclass=ABCMeta):
   @abstractmethod
   def reset(self):
     pass
+
+  @abstractmethod
+  def toggle_real_time(self):
+    pass

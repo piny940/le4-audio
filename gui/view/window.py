@@ -12,6 +12,7 @@ from .reset_button import ResetButton
 from .real_time_switch import RealTimeSwitch
 from .batch_panel import BatchPanel
 from .main_panel import MainPanel
+from core.constants import DEFAULT_REAL_TIME_ON
 
 class Window:
   def __init__(self, c: IController):
@@ -37,9 +38,9 @@ class Window:
     real_time_frame = tk.Frame(self.__window, width=1000, height=100)
     real_time_frame.pack(side=tk.TOP)
     self.real_time = RealTimeSwitch(real_time_frame, self.__c)
-    self.real_time.draw(True)
+    self.real_time.draw(DEFAULT_REAL_TIME_ON)
 
     self.main_panel = MainPanel(self.__window, self.__c)
-    self.main_panel.draw(True)
+    self.main_panel.draw(DEFAULT_REAL_TIME_ON)
 
     self.__window.mainloop()
