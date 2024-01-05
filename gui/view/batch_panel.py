@@ -14,7 +14,7 @@ from .figures import Figures
 class BatchPanel(ViewBase):
   def draw(self):
     # ----Figures ----
-    spec_frame = tk.Frame(self._frame, width=800, height=400)
+    spec_frame = tk.Frame(self._frame, width=1000, height=400)
     spec_frame.pack(side=tk.TOP)
     self.figures = Figures(spec_frame)
 
