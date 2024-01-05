@@ -1,3 +1,5 @@
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
 import pyaudio
 import numpy as np
 import threading
@@ -51,15 +53,20 @@ def animate(frame_index):
 	# ax1_sub.set_array(spectrogram_data_music)
 	
 	ax2_sub.set_data(time_x_data, volume_data)
+
+	ax3_sub.set_data(time_x_data, melody_data)
 	
-	return ax1_sub, ax2_sub
+	return ax1_sub, ax2_sub, ax3_sub
 
 # GUIで表示するための処理（Tkinter）
 root = tkinter.Tk()
 root.wm_title("EXP4-AUDIO-SAMPLE")
 
 # スペクトログラムを描画
-fig, ax1 = plt.subplots(1, 1)
+t = plt.subplots(1, 2)
+fig: Figure = t[0]
+ax1: Axes = t[1][0]
+ax3: Axes = t[1][1]
 canvas = FigureCanvasTkAgg(fig, master=root)
 
 # 横軸の値のデータ
@@ -71,6 +78,7 @@ freq_y_data = np.linspace(8000/MAX_NUM_SPECTROGRAM, 8000, MAX_NUM_SPECTROGRAM)
 # この numpy array にデータが更新されていく
 spectrogram_data = np.zeros((len(freq_y_data), len(time_x_data)))
 volume_data = np.zeros(len(time_x_data))
+melody_data = np.zeros(len(time_x_data))
 
 # 楽曲のスペクトログラムを格納するデータ（このサンプルでは計算のみ）
 spectrogram_data_music = np.zeros((len(freq_y_data), len(time_x_data)))
@@ -102,10 +110,23 @@ ax2 = ax1.twinx()
 # 戻り値はデータの更新 & 再描画のために必要
 ax2_sub, = ax2.plot(time_x_data, volume_data, c='y')
 
+# 音程をプロットする
+ax3_sub, = ax3.plot(time_x_data, melody_data, c='y')
+
 # ラベルの設定
 ax1.set_xlabel('sec')				# x軸のラベルを設定
 ax1.set_ylabel('frequency [Hz]')	# y軸のラベルを設定
 ax2.set_ylabel('volume [dB]')		# 反対側のy軸のラベルを設定
+ax3.set_xlabel('sec')				# x軸のラベルを設定
+ax3.set_ylabel('melody')			# y軸のラベルを設定
+ax3.set_yticks(np.arange(24),
+				#  list(["A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4",
+				#        "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5",
+				#        "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5"])
+				list(["C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3",
+							"G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4",
+							"E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"])
+				)
 
 # 音量を表示する際の値の範囲を設定
 ax2.set_ylim([VOLUME_MIN, VOLUME_MAX])
@@ -152,7 +173,7 @@ def input_callback(in_data, frame_count, time_info, status_flags):
 	# この関数は別スレッドで実行するため
 	# メインスレッドで定義した以下の２つの numpy array を利用できるように global 宣言する
 	# これらにはフレーム毎のスペクトルと音量のデータが格納される
-	global x_stacked_data, spectrogram_data, volume_data
+	global x_stacked_data, spectrogram_data, volume_data, melody_data
 
 	# 現在のフレームの音声データをnumpy arrayに変換
 	x_current_frame = np.frombuffer(in_data, dtype=np.float32)
@@ -179,6 +200,11 @@ def input_callback(in_data, frame_count, time_info, status_flags):
 		vol = 20 * np.log10(np.mean(x_current_frame ** 2) + EPSILON)
 		volume_data = np.roll(volume_data, -1)
 		volume_data[-1] = vol
+
+		# 音程
+		melody = shs(fft_log_abs_spec, SAMPLING_RATE, FRAME_SIZE)
+		melody_data = np.roll(melody_data, -1)
+		melody_data[-1] = melody
 	
 	# 戻り値は pyaudio の仕様に従うこと
 	return None, pyaudio.paContinue
