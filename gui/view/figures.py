@@ -9,7 +9,7 @@ from core.wave_range import WaveRange
 class Figures:
   def __init__(self, frame: tk.Frame):
     self.__frame = frame
-    self.__fig = plt.figure(figsize=(5, 2))
+    self.__fig = plt.figure(figsize=(10, 4))
     self.__spec_ax = None
     self.__melody_ax = None
     canvas = FigureCanvasTkAgg(self.__fig, master=self.__frame)

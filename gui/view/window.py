@@ -40,7 +40,10 @@ class Window:
     self.real_time = RealTimeSwitch(real_time_frame, self.__c)
     self.real_time.draw(DEFAULT_REAL_TIME_ON)
 
-    self.main_panel = MainPanel(self.__window, self.__c)
+    # ---- Main Panel ----
+    main_panel_frame = tk.Frame(self.__window, width=1000, height=500)
+    main_panel_frame.pack(side=tk.TOP)
+    self.main_panel = MainPanel(main_panel_frame, self.__c)
     self.main_panel.draw(DEFAULT_REAL_TIME_ON)
 
     self.__window.mainloop()
