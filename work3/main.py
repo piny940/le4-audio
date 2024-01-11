@@ -239,7 +239,7 @@ stream = p.open(
 
 # mp3ファイル名
 # ここは各自の音源ファイルに合わせて変更すること
-filename = '../audio/shs-test-man.mp3'
+filename = '../audio/kaeru.mp3'
 
 #
 # 【注意】なるべく1チャネルの音声を利用すること
